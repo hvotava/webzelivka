@@ -1,0 +1,2790 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinařství Želivka — Bílá vína z Vysočiny</title>
+    <meta name="description" content="Vinařství Želivka — přírodní bílá vína z vinice v Hněvkovicích nad Želivkou. Solaris, Hibernal, Sekt. Bez chemie, spontánní fermentace.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #b8963e;
+            --gold-light: #d4b562;
+            --wine-dark: #2c1810;
+            --wine: #5c3a2e;
+            --cream: #faf8f4;
+            --cream-dark: #f0ebe3;
+            --text: #3a3a3a;
+            --text-light: #6b6b6b;
+            --white: #ffffff;
+            --border: #e8e2d8;
+            --success: #4a7c59;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text);
+            background: var(--cream);
+            line-height: 1.7;
+            font-weight: 300;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── NAV ── */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.4s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 1px 20px rgba(0,0,0,0.06);
+            padding: 0.7rem 2rem;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            transition: color 0.3s;
+        }
+
+        .nav.scrolled .nav-logo { color: var(--wine-dark); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav.scrolled .nav-links a { color: var(--text); }
+        .nav-links a:hover { color: var(--gold-light); }
+        .nav.scrolled .nav-links a:hover { color: var(--gold); }
+
+        .nav-cart {
+            position: relative;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-cart svg {
+            width: 22px;
+            height: 22px;
+            stroke: rgba(255,255,255,0.9);
+            fill: none;
+            stroke-width: 1.5;
+            transition: stroke 0.3s;
+        }
+
+        .nav.scrolled .nav-cart svg { stroke: var(--text); }
+
+        .cart-count {
+            position: absolute;
+            top: -2px;
+            right: -4px;
+            background: var(--gold);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .cart-count.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .nav.scrolled .hamburger span { background: var(--wine-dark); }
+
+        /* ── HERO ── */
+        .hero {
+            height: 100vh;
+            min-height: 600px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.18), rgba(44,24,16,0.45)),
+                        url('hero.jpg');
+            background-size: cover;
+            background-position: center 40%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(44,24,16,0.2) 0%, rgba(44,24,16,0.4) 60%, rgba(44,24,16,0.7) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            padding: 0 2rem;
+        }
+
+        .hero-tag {
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.9;
+            max-width: 520px;
+            margin: 0 auto 2.5rem;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2.2rem;
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .btn-outline:hover {
+            border-color: white;
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* ── SECTIONS ── */
+        section { padding: 6rem 2rem; }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+        }
+
+        .section-tag {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 400;
+            color: var(--wine-dark);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            color: var(--text-light);
+            font-size: 1.05rem;
+            max-width: 560px;
+            line-height: 1.8;
+        }
+
+        /* ── ABOUT ── */
+        #o-nas { background: var(--white); }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .about-image {
+            aspect-ratio: 4/5;
+            background: var(--cream-dark);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            overflow: hidden;
+        }
+
+        /* ── GALLERY CAROUSEL ── */
+        .gallery-carousel {
+            position: relative;
+            aspect-ratio: 4/5;
+            border-radius: 4px;
+            overflow: hidden;
+            background: var(--cream-dark);
+        }
+
+        .gallery-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-slide {
+            min-width: 100%;
+            height: 100%;
+        }
+
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 42px;
+            height: 42px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(4px);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            transition: all 0.25s;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+        }
+
+        .gallery-arrow:hover {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .gallery-arrow svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--wine-dark);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .gallery-prev { left: 0.75rem; }
+        .gallery-next { right: 0.75rem; }
+
+        .gallery-dots {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.4rem;
+            z-index: 2;
+        }
+
+        .gallery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0;
+        }
+
+        .gallery-dot.active {
+            background: white;
+            transform: scale(1.2);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2.5rem 1.25rem 0.75rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .about-text p {
+            margin-bottom: 1.2rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.25rem;
+        }
+
+        /* ── VARIETIES ── */
+        .varieties-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .variety-card {
+            background: var(--white);
+            border-radius: 4px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .variety-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+        }
+
+        .variety-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 1.5rem;
+            background: var(--cream);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .variety-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--gold);
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .variety-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--wine-dark);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .variety-card .variety-latin {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .variety-card p {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ── WINES SHOP ── */
+        #vina { background: var(--white); }
+
+        .wines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .wine-card {
+            background: var(--cream);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .wine-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+        }
+
+        .wine-image {
+            height: 240px;
+            background: linear-gradient(135deg, var(--cream-dark) 0%, #e8e2d8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .wine-bottle {
+            font-size: 4rem;
+            opacity: 0.15;
+        }
+
+        .wine-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--gold);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2px;
+        }
+
+        .wine-info {
+            padding: 1.5rem;
+        }
+
+        .wine-info h3 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--wine-dark);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .wine-params {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .wine-desc {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .wine-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .wine-price {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--wine-dark);
+            font-weight: 600;
+        }
+
+        .wine-price span {
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: var(--text-light);
+            font-family: var(--font-body);
+        }
+
+        .wine-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-right: 0.75rem;
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            color: var(--text);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .qty-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+        .qty-value {
+            width: 36px;
+            height: 32px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .btn-add {
+            background: var(--wine-dark);
+            color: white;
+            border: none;
+            padding: 0.55rem 1.2rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.3s;
+            font-family: var(--font-body);
+        }
+
+        .btn-add:hover { background: var(--gold); }
+
+        .wine-add-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .discount-note {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.2rem;
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.88rem;
+            color: var(--text-light);
+        }
+
+        .discount-note strong { color: var(--gold); font-weight: 600; }
+
+        /* ── PROCESS ── */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .process-step {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .step-number {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--gold);
+            font-weight: 600;
+            opacity: 0.4;
+            margin-bottom: 1rem;
+        }
+
+        .process-step h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--wine-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .process-step p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ── DEGUSTACE ── */
+        #degustace { background: var(--wine-dark); color: white; }
+
+        #degustace .section-tag { color: var(--gold-light); }
+        #degustace .section-title { color: white; }
+
+        #degustace .section-subtitle {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .degustace-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+            align-items: center;
+        }
+
+        .degustace-text p {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .degustace-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .degustace-feature {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .feature-icon {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            background: rgba(184,150,62,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--gold-light);
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .feature-text h4 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-text p {
+            font-size: 0.83rem;
+            color: rgba(255,255,255,0.6);
+            margin: 0;
+        }
+
+        /* ── SHIPPING / DOPRAVA ── */
+        .shipping-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .shipping-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2rem;
+        }
+
+        .shipping-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            color: var(--wine-dark);
+            margin-bottom: 1rem;
+        }
+
+        .shipping-card p, .shipping-card li {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        .shipping-card ul {
+            list-style: none;
+            margin-top: 0.75rem;
+        }
+
+        .shipping-card li {
+            padding: 0.3rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+
+        .shipping-card li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75rem;
+            width: 5px;
+            height: 5px;
+            background: var(--gold);
+            border-radius: 50%;
+        }
+
+        .price-table {
+            width: 100%;
+            margin-top: 1rem;
+            border-collapse: collapse;
+        }
+
+        .price-table td {
+            padding: 0.5rem 0;
+            font-size: 0.88rem;
+            color: var(--text-light);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .price-table td:last-child {
+            text-align: right;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        /* ── CONTACT ── */
+        #kontakt { background: var(--white); }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            background: var(--cream);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--gold);
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .contact-item h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--wine-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .contact-item p, .contact-item a {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .contact-item a:hover { color: var(--gold); }
+
+        .contact-map {
+            background: var(--cream-dark);
+            border-radius: 4px;
+            height: 100%;
+            min-height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .directions {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--cream);
+            border-radius: 4px;
+        }
+
+        .directions h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--wine-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .directions p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            background: var(--wine-dark);
+            color: rgba(255,255,255,0.6);
+            padding: 3rem 2rem 2rem;
+        }
+
+        .footer-grid {
+            max-width: 1140px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-brand {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: white;
+            margin-bottom: 0.75rem;
+        }
+
+        .footer p { font-size: 0.83rem; line-height: 1.7; }
+
+        .footer h4 {
+            color: white;
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: block;
+            padding: 0.25rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover { color: var(--gold-light); }
+
+        .footer-bottom {
+            max-width: 1140px;
+            margin: 2rem auto 0;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+        }
+
+        .footer-bottom a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+        }
+
+        .footer-bottom a:hover { color: var(--gold-light); }
+
+        /* ── CART DRAWER ── */
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .cart-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 420px;
+            max-width: 90vw;
+            background: var(--white);
+            z-index: 2001;
+            transform: translateX(100%);
+            transition: transform 0.35s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-drawer.open {
+            transform: translateX(0);
+        }
+
+        .cart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cart-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--wine-dark);
+        }
+
+        .cart-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--cream);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--text);
+            transition: background 0.2s;
+        }
+
+        .cart-close:hover { background: var(--cream-dark); }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.5rem;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+        }
+
+        .cart-item-thumb {
+            width: 56px;
+            height: 72px;
+            background: var(--cream);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            opacity: 0.2;
+            min-width: 56px;
+        }
+
+        .cart-item-info { flex: 1; }
+
+        .cart-item-name {
+            font-weight: 500;
+            font-size: 0.88rem;
+            color: var(--wine-dark);
+        }
+
+        .cart-item-price {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            margin-top: 0.2rem;
+        }
+
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-top: 0.5rem;
+        }
+
+        .cart-qty-btn {
+            width: 26px;
+            height: 26px;
+            border: 1px solid var(--border);
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+
+        .cart-qty-val {
+            width: 30px;
+            height: 26px;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 0.78rem;
+            padding: 0.2rem 0;
+            transition: color 0.2s;
+        }
+
+        .cart-item-remove:hover { color: #c0392b; }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .cart-discount {
+            font-size: 0.82rem;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .cart-total-label {
+            font-size: 0.95rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .cart-total-price {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--wine-dark);
+            font-weight: 700;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            background: var(--gold);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background 0.3s;
+            font-family: var(--font-body);
+        }
+
+        .btn-checkout:hover { background: var(--gold-light); }
+
+        /* ── ORDER MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: 6px;
+            width: 560px;
+            max-width: 92vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.open .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--wine-dark);
+        }
+
+        .modal-body { padding: 2rem; }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            font-size: 0.9rem;
+            font-family: var(--font-body);
+            color: var(--text);
+            background: var(--white);
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .form-section-title {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--wine-dark);
+            margin: 1.5rem 0 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .form-check {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .form-check input[type="checkbox"] {
+            width: auto;
+            margin-top: 0.25rem;
+        }
+
+        .form-check label {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            text-transform: none;
+            letter-spacing: 0;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .form-check a {
+            color: var(--gold);
+            text-decoration: underline;
+        }
+
+        .order-summary {
+            background: var(--cream);
+            padding: 1.2rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-summary-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            padding: 0.3rem 0;
+            color: var(--text-light);
+        }
+
+        .order-summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            color: var(--wine-dark);
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-submit-order {
+            width: 100%;
+            background: var(--gold);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 3px;
+            font-family: var(--font-body);
+            transition: background 0.3s;
+        }
+
+        .btn-submit-order:hover { background: var(--gold-light); }
+
+        .success-message {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.5rem;
+            background: rgba(74,124,89,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke: var(--success);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .success-message h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--wine-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .success-message p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .about-grid,
+            .degustace-content,
+            .shipping-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .varieties-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav-links { display: none; }
+
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(12px);
+                padding: 1rem 2rem 1.5rem;
+                gap: 0;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.open a {
+                color: var(--text);
+                padding: 0.75rem 0;
+                display: block;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .hamburger { display: flex; }
+
+            .varieties-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wines-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            section { padding: 4rem 1.25rem; }
+        }
+
+        /* ── ANIMATIONS ── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── COOKIE BANNER ── */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 5000;
+            background: var(--white);
+            box-shadow: 0 -4px 30px rgba(0,0,0,0.12);
+            padding: 1.5rem 2rem;
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+        }
+
+        .cookie-banner.visible {
+            transform: translateY(0);
+        }
+
+        .cookie-inner {
+            max-width: 1140px;
+            margin: 0 auto;
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .cookie-text {
+            flex: 1;
+        }
+
+        .cookie-text h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--wine-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .cookie-text p {
+            font-size: 0.83rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .cookie-text a {
+            color: var(--gold);
+            text-decoration: underline;
+        }
+
+        .cookie-options {
+            margin-top: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .cookie-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            color: var(--text);
+        }
+
+        .cookie-option input[type="checkbox"] {
+            accent-color: var(--gold);
+        }
+
+        .cookie-option.disabled {
+            color: var(--text-light);
+        }
+
+        .cookie-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 180px;
+        }
+
+        .btn-cookie {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn-cookie-accept {
+            background: var(--gold);
+            color: white;
+        }
+
+        .btn-cookie-accept:hover { background: var(--gold-light); }
+
+        .btn-cookie-save {
+            background: var(--wine-dark);
+            color: white;
+        }
+
+        .btn-cookie-save:hover { background: var(--wine); }
+
+        .btn-cookie-reject {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+        }
+
+        .btn-cookie-reject:hover {
+            border-color: var(--text-light);
+            color: var(--text);
+        }
+
+        /* ── POLICY MODAL ── */
+        .policy-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 6000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .policy-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .policy-modal {
+            background: var(--white);
+            border-radius: 6px;
+            width: 720px;
+            max-width: 92vw;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .policy-overlay.open .policy-modal {
+            transform: translateY(0);
+        }
+
+        .policy-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            min-height: 60px;
+        }
+
+        .policy-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--wine-dark);
+        }
+
+        .policy-body {
+            padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .policy-body h3 {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            color: var(--wine-dark);
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .policy-body h3:first-child { margin-top: 0; }
+
+        .policy-body p, .policy-body li {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .policy-body ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .policy-body strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .policy-date {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 640px) {
+            .cookie-inner {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .cookie-buttons {
+                flex-direction: row;
+                min-width: 0;
+                flex-wrap: wrap;
+            }
+            .cookie-buttons .btn-cookie {
+                flex: 1;
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+    <a href="#" class="nav-logo">Vinařství Želivka</a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#o-nas">O nás</a></li>
+        <li><a href="#odrudy">Odrůdy</a></li>
+        <li><a href="#vina">Vína</a></li>
+        <li><a href="#degustace">Degustace</a></li>
+        <li><a href="#doprava">Doprava</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+        <li>
+            <div class="nav-cart" onclick="toggleCart()">
+                <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <div class="hero-tag">Vinice Hněvkovice nad Želivkou</div>
+        <h1>Víno tvořené přírodou a sluncem</h1>
+        <p>Bílá vína z 627 keřů na jižním svahu Vysočiny. Bez chemie, spontánní fermentace, zrání v dubových sudech v klášteře Sv. Voršily.</p>
+        <div class="hero-buttons">
+            <a href="#vina" class="btn btn-primary">Objednat víno</a>
+            <a href="#degustace" class="btn btn-outline">Domluvit degustaci</a>
+        </div>
+    </div>
+</section>
+
+<!-- O NÁS -->
+<section id="o-nas">
+    <div class="container">
+        <div class="about-grid fade-in">
+            <div class="gallery-carousel" id="galleryCarousel">
+                <div class="gallery-track" id="galleryTrack">
+                    <div class="gallery-slide"><img src="gallery/06-vinobrani.jpg" alt="Vinobraní na vinici Želivka" loading="lazy"></div>
+                    <div class="gallery-slide"><img src="gallery/10-vinice-z-boku.jpg" alt="Výhled na vinici z boku" loading="lazy"></div>
+                    <div class="gallery-slide"><img src="gallery/08-sklep.jpg" alt="Vinný sklep v klášteře Sv. Voršily" loading="lazy"></div>
+                    <div class="gallery-slide"><img src="gallery/09-sud-vina.jpg" alt="Degustace na vinici" loading="lazy"></div>
+                    <div class="gallery-slide"><img src="gallery/07-mjs-vinice.jpg" alt="Vinař Martin Jan Stránský" loading="lazy"></div>
+                    <div class="gallery-slide"><img src="gallery/04-rady.jpg" alt="Řady vinice Želivka" loading="lazy"></div>
+                    <div class="gallery-slide"><img src="gallery/05-vinobrani-2024.jpg" alt="Vinobraní 2024" loading="lazy"></div>
+                    <div class="gallery-slide"><img src="gallery/03-degustace.jpg" alt="Dubové sudy v klášterním sklepě" loading="lazy"></div>
+                    <div class="gallery-slide"><img src="gallery/01-vina-cena.jpg" alt="Vína Želivka jako ceny golfového turnaje" loading="lazy"></div>
+                    <div class="gallery-slide"><img src="gallery/02-diplom.jpg" alt="Zlatá medaile — Solaris 2017" loading="lazy"></div>
+                    <div class="gallery-slide"><img src="gallery/11-vinobrani-2.jpg" alt="Vinobraní na vinici" loading="lazy"></div>
+                </div>
+                <button class="gallery-arrow gallery-prev" onclick="galleryNav(-1)" aria-label="Předchozí fotka">
+                    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <button class="gallery-arrow gallery-next" onclick="galleryNav(1)" aria-label="Další fotka">
+                    <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+                </button>
+                <div class="gallery-dots" id="galleryDots"></div>
+                <div class="gallery-caption" id="galleryCaption"></div>
+            </div>
+            <div class="about-text">
+                <div class="section-tag">O vinařství</div>
+                <h2 class="section-title">Příběh vinice Želivka</h2>
+                <p>Vinice „Želivka" v obci Hněvkovice vznikla v dubnu 2014. S pomocí místních vybudovaly konstrukci Vinné Sklepy Kutná Hora, pod vedením Lukáše Rudolfského.</p>
+                <p>Svah nad Želivkou, na který svítí slunce celý den, nabízí velmi dobré podmínky pro pěstování bílého vína. Víno se lisuje v Kutné Hoře a skladuje v dubových sudech v klášteře Sv. Voršily.</p>
+                <p>Víno je pěstováno bez jakýchkoliv chemických prostředků. Postřiky se vyrábí na místě z různých místních bylinek a keřů. Fermentování je spontánní.</p>
+                <div class="about-stats">
+                    <div>
+                        <div class="stat-number">2014</div>
+                        <div class="stat-label">Založení vinice</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">627</div>
+                        <div class="stat-label">Keřů vinné révy</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">700 l</div>
+                        <div class="stat-label">Roční úroda</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ODRŮDY -->
+<section id="odrudy">
+    <div class="container">
+        <div class="fade-in" style="text-align:center; max-width:600px; margin:0 auto 0;">
+            <div class="section-tag">Naše odrůdy</div>
+            <h2 class="section-title">Odolné odrůdy pro výjimečná vína</h2>
+            <p class="section-subtitle" style="margin:0 auto;">Pěstujeme odrůdy, které jsou přirozeně odolné vůči plísním a mrazům — ideální pro podmínky Vysočiny.</p>
+        </div>
+        <div class="varieties-grid fade-in">
+            <div class="variety-card">
+                <div class="variety-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 000 20 14.5 14.5 0 000-20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                </div>
+                <h3>Solaris</h3>
+                <div class="variety-latin">Merzling × Muscat Ottonel — Zarya</div>
+                <p>Aromatická odrůda s výraznou chutí a vysokou odolností. Naše vlajková loď — držitel zlaté medaile na mezinárodním poháru vín v Hradci Králové.</p>
+            </div>
+            <div class="variety-card">
+                <div class="variety-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <h3>Hibernal</h3>
+                <div class="variety-latin">Seibel × Ryzlink rýnský</div>
+                <p>Citrusové, svěží víno s meruňkovou chutí. Při delším skladování nabývá na komplexnosti a proniknutí stále hlubšího charakteru.</p>
+            </div>
+            <div class="variety-card">
+                <div class="variety-icon">
+                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                </div>
+                <h3>Moravský muškát</h3>
+                <div class="variety-latin">Stolní hrozny</div>
+                <p>Výběrová odrůda pro přímou konzumaci. Aromatické hrozny s muškátovou příchutí, ideální k letním chvílím přímo z vinice.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- VÍNA / SHOP -->
+<section id="vina">
+    <div class="container">
+        <div class="fade-in" style="text-align:center; max-width:600px; margin:0 auto;">
+            <div class="section-tag">E-shop</div>
+            <h2 class="section-title">Naše vína</h2>
+            <p class="section-subtitle" style="margin:0 auto;">Víno má vynikající chuť, čímž získalo vysoké ocenění na soutěžích, včetně zlaté medaile na mezinárodním poháru vín.</p>
+        </div>
+        <div class="wines-grid fade-in" id="winesGrid">
+            <!-- Rendered by JS -->
+        </div>
+        <div class="discount-note fade-in">
+            <strong>Sleva 5 %</strong> při objednání 6 lahví &nbsp;|&nbsp; <strong>Sleva 10 %</strong> při objednání 12 lahví
+        </div>
+    </div>
+</section>
+
+<!-- PROCES -->
+<section id="proces">
+    <div class="container">
+        <div class="fade-in" style="text-align:center; max-width:600px; margin:0 auto;">
+            <div class="section-tag">Jak tvoříme víno</div>
+            <h2 class="section-title">Od vinice ke sklenici</h2>
+        </div>
+        <div class="process-steps fade-in">
+            <div class="process-step">
+                <div class="step-number">01</div>
+                <h3>Přírodní péče</h3>
+                <p>Bez chemie. Postřiky z místních bylinek a keřů, přirozená rovnováha vinice na jižním svahu.</p>
+            </div>
+            <div class="process-step">
+                <div class="step-number">02</div>
+                <h3>Ruční sběr</h3>
+                <p>Každý hrozen je pečlivě vybrán ručně v optimálním stupni zralosti.</p>
+            </div>
+            <div class="process-step">
+                <div class="step-number">03</div>
+                <h3>Lisování</h3>
+                <p>Šetrné lisování v Kutné Hoře za pomoci tradičních postupů Vinných Sklepů.</p>
+            </div>
+            <div class="process-step">
+                <div class="step-number">04</div>
+                <h3>Zrání v dubě</h3>
+                <p>Spontánní fermentace a zrání v dubových sudech v historickém klášteře Sv. Voršily.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DEGUSTACE -->
+<section id="degustace">
+    <div class="container">
+        <div class="degustace-content fade-in">
+            <div class="degustace-text">
+                <div class="section-tag">Zážitek</div>
+                <h2 class="section-title">Degustace na vinici</h2>
+                <p>Velice rádi Vás uvítáme na naší vinici, kde si užijete vynikající výhled krajiny nad Želivkou spojený s prohlídkou vinice a degustací vín dle vašeho programu a představ.</p>
+                <p>Domluvte si nezávazně termín a program — od komorní degustace pro dva až po firemní akci s vlastním cateringem.</p>
+                <a href="#kontakt" class="btn btn-primary" style="margin-top:1rem;">Domluvit degustaci</a>
+            </div>
+            <div class="degustace-features">
+                <div class="degustace-feature">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Výhled nad Želivkou</h4>
+                        <p>Panoramatický výhled z jižního svahu na řeku Želivku a okolní krajinu Vysočiny.</p>
+                    </div>
+                </div>
+                <div class="degustace-feature">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 21h12a2 2 0 002-2v-2H10v2a2 2 0 01-2 2zm-2 0a2 2 0 01-2-2V5a2 2 0 012-2h8l4 4v6"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Program na míru</h4>
+                        <p>Od intimní degustace po firemní event — vše přizpůsobíme vašim přáním.</p>
+                    </div>
+                </div>
+                <div class="degustace-feature">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Osobní přístup</h4>
+                        <p>Provedou Vás vinařstvím přímo zakladatelé, včetně odborného výkladu.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DOPRAVA -->
+<section id="doprava">
+    <div class="container">
+        <div class="fade-in" style="text-align:center; max-width:600px; margin:0 auto;">
+            <div class="section-tag">Doprava a platba</div>
+            <h2 class="section-title">Doručení s péčí</h2>
+            <p class="section-subtitle" style="margin:0 auto;">Pro rozvoz jsme vybrali firmu Messenger — jako jediná na trhu manipuluje s víny pouze ručně.</p>
+        </div>
+        <div class="shipping-grid fade-in">
+            <div class="shipping-card">
+                <h3>Kurýr Messenger — celá ČR</h3>
+                <p>Doručení do 1–3 pracovních dnů po zaplacení objednávky.</p>
+                <ul>
+                    <li>Doručení v pracovních dnech 9:00–18:00</li>
+                    <li>V den doručení vám přijde SMS s kontaktem na kurýra</li>
+                    <li>Vína manipulována výhradně ručně</li>
+                </ul>
+                <table class="price-table">
+                    <tr><td>1 lahev</td><td>202 Kč</td></tr>
+                    <tr><td>2 lahve</td><td>212 Kč</td></tr>
+                    <tr><td>3 lahve</td><td>238 Kč</td></tr>
+                    <tr><td>4–6 lahví</td><td>241 Kč</td></tr>
+                    <tr><td>12 lahví</td><td>397 Kč</td></tr>
+                </table>
+            </div>
+            <div class="shipping-card">
+                <h3>Osobní odběr — zdarma</h3>
+                <p>Národní 9, Praha 1, 4. patro (kanceláře MUDr. Stránského)</p>
+                <ul>
+                    <li>Platba do 15:00 → připraveno následující pracovní den od 12:00</li>
+                    <li>Platba po 15:00 → připraveno 2. pracovní den</li>
+                    <li>Výdej v pracovní dny 9:00–16:30</li>
+                    <li>Osobní odběr na vinici po dohodě s vinařem</li>
+                </ul>
+                <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border);">
+                    <h3>Platba</h3>
+                    <ul>
+                        <li>Bankovní převod: 301019565/5500</li>
+                        <li>Hotovost při osobním odběru</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+    <div class="container">
+        <div class="fade-in">
+            <div class="section-tag">Kontakt</div>
+            <h2 class="section-title">Ozvěte se nám</h2>
+        </div>
+        <div class="contact-grid fade-in">
+            <div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                    </div>
+                    <div>
+                        <h4>Telefon</h4>
+                        <a href="tel:+420222075101">222 075 101</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </div>
+                    <div>
+                        <h4>Objednávky</h4>
+                        <a href="mailto:objednavky@vinarstvizelivka.cz">objednavky@vinarstvizelivka.cz</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </div>
+                    <div>
+                        <h4>Degustace a prodej</h4>
+                        <a href="mailto:stransky@mjs.narodni.cz">stransky@mjs.narodni.cz</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <div>
+                        <h4>Adresa</h4>
+                        <p>Vinice Želivka, Hněvkovice<br>Sklepy: Národní 9, Praha 1</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg>
+                    </div>
+                    <div>
+                        <h4>MUDr. Martin Jan Stránský</h4>
+                        <p>Člen Cechu Českých vinařů<br>IČO: 49627929</p>
+                    </div>
+                </div>
+                <div class="directions">
+                    <h4>Jak se k nám dostat</h4>
+                    <p><strong>Z Prahy/Brna:</strong> D1, exit 66, 7,5 km do obce Hněvkovice, směrem Ledeč nad Sázavou.</p>
+                    <p><strong>Z Ledče nad Sázavou:</strong> směrem na Loket, 6 km do obce Hněvkovice.</p>
+                    <p><strong>V Hněvkovicích:</strong> na křižovatce zahnout dolů na jih, pokračovat na „Klepandu" — uvidíte dvě stavby a stožár s vlajkou s erbem Hněvkovic.</p>
+                </div>
+            </div>
+            <div class="contact-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10000!2d15.2!3d49.65!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470c8c8e3c0db0e9%3A0x400af0f661960!2sHn%C4%9Bvkovice!5e0!3m2!1scs!2scz" width="100%" height="100%" style="border:0; border-radius:4px; min-height:350px;" allowfullscreen loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-grid">
+        <div>
+            <div class="footer-brand">Vinařství Želivka</div>
+            <p>Přírodní bílá vína z vinice v Hněvkovicích nad Želivkou. Bez chemie, spontánní fermentace, zrání v dubových sudech.</p>
+        </div>
+        <div>
+            <h4>Navigace</h4>
+            <ul class="footer-links">
+                <li><a href="#o-nas">O vinařství</a></li>
+                <li><a href="#vina">Objednat víno</a></li>
+                <li><a href="#degustace">Degustace</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Kontakt</h4>
+            <ul class="footer-links">
+                <li><a href="tel:+420222075101">222 075 101</a></li>
+                <li><a href="mailto:objednavky@vinarstvizelivka.cz">objednavky@vinarstvizelivka.cz</a></li>
+                <li><a href="#">Národní 9, Praha 1</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>&copy; 2024–2026 Vinařství Želivka. Všechna práva vyhrazena.</span>
+        <div style="display:flex; gap:1.5rem;">
+            <a href="#" onclick="openPolicy('cookies'); return false;">Zásady cookies</a>
+            <a href="#" onclick="openPolicy('gdpr'); return false;">Ochrana osobních údajů</a>
+            <a href="#" onclick="openCookieSettings(); return false;">Nastavení cookies</a>
+        </div>
+    </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+        <h2>Košík</h2>
+        <button class="cart-close" onclick="toggleCart()">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+        <div class="cart-empty">Košík je prázdný</div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+        <div class="cart-discount" id="cartDiscount"></div>
+        <div class="cart-total">
+            <span class="cart-total-label">Celkem</span>
+            <span class="cart-total-price" id="cartTotal">0 Kč</span>
+        </div>
+        <button class="btn-checkout" onclick="openCheckout()">Pokračovat k objednávce</button>
+    </div>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="orderModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Dokončení objednávky</h2>
+            <button class="cart-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <div class="order-summary" id="orderSummary"></div>
+            <div class="form-section-title">Kontaktní údaje</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Jméno *</label>
+                    <input type="text" id="fName" required>
+                </div>
+                <div class="form-group">
+                    <label>Příjmení *</label>
+                    <input type="text" id="fSurname" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>E-mail *</label>
+                    <input type="email" id="fEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefon</label>
+                    <input type="tel" id="fPhone">
+                </div>
+            </div>
+            <div class="form-section-title">Doručení</div>
+            <div class="form-group">
+                <label>Způsob doručení *</label>
+                <select id="fDelivery" onchange="updateShipping()">
+                    <option value="messenger">Kurýr Messenger (celá ČR)</option>
+                    <option value="pickup">Osobní odběr — Národní 9, Praha 1 (zdarma)</option>
+                    <option value="vineyard">Osobní odběr na vinici (zdarma)</option>
+                </select>
+            </div>
+            <div id="addressFields">
+                <div class="form-group">
+                    <label>Ulice *</label>
+                    <input type="text" id="fStreet">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Město *</label>
+                        <input type="text" id="fCity">
+                    </div>
+                    <div class="form-group">
+                        <label>PSČ *</label>
+                        <input type="text" id="fZip">
+                    </div>
+                </div>
+            </div>
+            <div class="form-section-title">Platba</div>
+            <div class="form-group">
+                <select id="fPayment">
+                    <option value="transfer">Bankovní převod (č.ú. 301019565/5500)</option>
+                    <option value="cash">Hotovost při osobním odběru</option>
+                </select>
+            </div>
+            <div class="form-section-title">Souhlasy</div>
+            <div class="form-check">
+                <input type="checkbox" id="c18">
+                <label for="c18">Potvrzuji, že jsem starší 18 let *</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" id="cVOP">
+                <label for="cVOP">Souhlasím s <a href="#" onclick="openPolicy('cookies'); return false;">obchodními podmínkami</a> *</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" id="cGDPR">
+                <label for="cGDPR">Souhlasím se <a href="#" onclick="openPolicy('gdpr'); return false;">zásadami ochrany osobních údajů</a> *</label>
+            </div>
+            <button class="btn-submit-order" onclick="submitOrder()" style="margin-top:1.5rem;">Odeslat objednávku</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const wines = [
+    {
+        id: 'cuvee24',
+        name: 'Solaris-Hibernal Cuvée 2024',
+        params: '11,5 % alk. · zbytkový cukr 3,0 g/l · kyseliny 6 g/l',
+        desc: 'Perfektně vybalancované, se zlatou barvou, zralé a čisté víno se zemitým charakterem, doplněné tóny citrusů a ananasu.',
+        price: 345,
+        badge: 'Novinka'
+    },
+    {
+        id: 'solaris23',
+        name: 'Solaris 2023',
+        params: '11,76 % alk. · zbytkový cukr 1,6 g/l · kyseliny 5,91 g/l',
+        desc: 'Lehké, příjemné, suché, svěží aromatické víno, perfektní pro letní pití.',
+        price: 295,
+        badge: null
+    },
+    {
+        id: 'hibernal23',
+        name: 'Hibernal 2023',
+        params: '10,57 % alk. · zbytkový cukr 1,9 g/l · kyseliny 6,7 g/l',
+        desc: 'Citrusové, svěží, skoro perlivé víno s meruňkovou chutí. Při skladování nabývá na komplexnosti.',
+        price: 295,
+        badge: null
+    },
+    {
+        id: 'hibernal22',
+        name: 'Hibernal 2022',
+        params: '10,63 % alk. · zbytkový cukr 0,8 g/l · kyseliny 5,5 g/l',
+        desc: 'Vynikající zralé suché víno s krásnou vůní, barvou a charakteristickou chutí.',
+        price: 325,
+        badge: null
+    },
+    {
+        id: 'sekt21',
+        name: 'Sekt 2021',
+        params: '11 % alk. · zbytkový cukr 0,5 g/l · kyseliny 8,4 g/l',
+        desc: 'Mimořádně vynikající sekt na světové úrovni. Tradiční méthode champenoise. Nádherně perlivý, suchý, svěží a čistý, s chutí meruněk a jemnou bezovou dochutí.',
+        price: 695,
+        badge: 'Zlatá medaile'
+    }
+];
+
+let cart = {};
+
+function renderWines() {
+    const grid = document.getElementById('winesGrid');
+    grid.innerHTML = wines.map(w => `
+        <div class="wine-card">
+            <div class="wine-image">
+                ${w.badge ? `<span class="wine-badge">${w.badge}</span>` : ''}
+                <div class="wine-bottle">🍾</div>
+            </div>
+            <div class="wine-info">
+                <h3>${w.name}</h3>
+                <div class="wine-params">${w.params}</div>
+                <div class="wine-desc">${w.desc}</div>
+                <div class="wine-footer">
+                    <div class="wine-price">${w.price} Kč <span>/ 0,7l</span></div>
+                    <div class="wine-add-row">
+                        <div class="wine-quantity">
+                            <button class="qty-btn" onclick="changeQty('${w.id}', -1)">−</button>
+                            <div class="qty-value" id="qty-${w.id}">0</div>
+                            <button class="qty-btn" onclick="changeQty('${w.id}', 1)">+</button>
+                        </div>
+                        <button class="btn-add" onclick="addToCart('${w.id}')">Do košíku</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+const qtyState = {};
+wines.forEach(w => qtyState[w.id] = 0);
+
+function changeQty(id, delta) {
+    qtyState[id] = Math.max(0, (qtyState[id] || 0) + delta);
+    document.getElementById(`qty-${id}`).textContent = qtyState[id];
+}
+
+function addToCart(id) {
+    const qty = qtyState[id] || 0;
+    if (qty === 0) {
+        qtyState[id] = 1;
+        document.getElementById(`qty-${id}`).textContent = 1;
+    }
+    const addQty = qtyState[id];
+    cart[id] = (cart[id] || 0) + addQty;
+    qtyState[id] = 0;
+    document.getElementById(`qty-${id}`).textContent = 0;
+    updateCartUI();
+    toggleCart(true);
+}
+
+function updateCartUI() {
+    const items = document.getElementById('cartItems');
+    const footer = document.getElementById('cartFooter');
+    const count = document.getElementById('cartCount');
+    const totalEl = document.getElementById('cartTotal');
+    const discountEl = document.getElementById('cartDiscount');
+
+    const totalItems = Object.values(cart).reduce((s, q) => s + q, 0);
+    count.textContent = totalItems;
+    count.classList.toggle('visible', totalItems > 0);
+
+    if (totalItems === 0) {
+        items.innerHTML = '<div class="cart-empty">Košík je prázdný</div>';
+        footer.style.display = 'none';
+        return;
+    }
+
+    footer.style.display = 'block';
+    items.innerHTML = Object.entries(cart).map(([id, qty]) => {
+        const w = wines.find(x => x.id === id);
+        return `
+            <div class="cart-item">
+                <div class="cart-item-thumb">🍷</div>
+                <div class="cart-item-info">
+                    <div class="cart-item-name">${w.name}</div>
+                    <div class="cart-item-price">${w.price} Kč / ks</div>
+                    <div class="cart-item-qty">
+                        <button class="cart-qty-btn" onclick="cartQty('${id}', -1)">−</button>
+                        <div class="cart-qty-val">${qty}</div>
+                        <button class="cart-qty-btn" onclick="cartQty('${id}', 1)">+</button>
+                    </div>
+                </div>
+                <button class="cart-item-remove" onclick="removeFromCart('${id}')">Odebrat</button>
+            </div>
+        `;
+    }).join('');
+
+    let subtotal = 0;
+    Object.entries(cart).forEach(([id, qty]) => {
+        subtotal += wines.find(x => x.id === id).price * qty;
+    });
+
+    let discount = 0;
+    if (totalItems >= 12) { discount = 0.10; }
+    else if (totalItems >= 6) { discount = 0.05; }
+
+    if (discount > 0) {
+        discountEl.textContent = `Sleva ${discount * 100} % (${totalItems} lahví) — ušetříte ${Math.round(subtotal * discount)} Kč`;
+        discountEl.style.display = 'block';
+    } else {
+        discountEl.style.display = 'none';
+    }
+
+    const total = Math.round(subtotal * (1 - discount));
+    totalEl.textContent = total.toLocaleString('cs') + ' Kč';
+}
+
+function cartQty(id, delta) {
+    cart[id] = Math.max(1, cart[id] + delta);
+    updateCartUI();
+}
+
+function removeFromCart(id) {
+    delete cart[id];
+    updateCartUI();
+}
+
+function toggleCart(forceOpen) {
+    const overlay = document.getElementById('cartOverlay');
+    const drawer = document.getElementById('cartDrawer');
+    const isOpen = drawer.classList.contains('open');
+
+    if (forceOpen === true || !isOpen) {
+        overlay.classList.add('open');
+        drawer.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    } else {
+        overlay.classList.remove('open');
+        drawer.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+}
+
+function openCheckout() {
+    toggleCart();
+    const modal = document.getElementById('orderModal');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    renderOrderSummary();
+}
+
+function closeModal() {
+    document.getElementById('orderModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function renderOrderSummary() {
+    const el = document.getElementById('orderSummary');
+    const totalItems = Object.values(cart).reduce((s, q) => s + q, 0);
+    let subtotal = 0;
+    let html = '';
+
+    Object.entries(cart).forEach(([id, qty]) => {
+        const w = wines.find(x => x.id === id);
+        const lineTotal = w.price * qty;
+        subtotal += lineTotal;
+        html += `<div class="order-summary-item"><span>${w.name} × ${qty}</span><span>${lineTotal.toLocaleString('cs')} Kč</span></div>`;
+    });
+
+    let discount = 0;
+    if (totalItems >= 12) discount = 0.10;
+    else if (totalItems >= 6) discount = 0.05;
+
+    if (discount > 0) {
+        const discAmt = Math.round(subtotal * discount);
+        html += `<div class="order-summary-item" style="color:var(--success)"><span>Sleva ${discount*100} %</span><span>−${discAmt.toLocaleString('cs')} Kč</span></div>`;
+        subtotal -= discAmt;
+    }
+
+    html += `<div class="order-summary-total"><span>Celkem bez dopravy</span><span>${subtotal.toLocaleString('cs')} Kč</span></div>`;
+    el.innerHTML = html;
+}
+
+function updateShipping() {
+    const delivery = document.getElementById('fDelivery').value;
+    document.getElementById('addressFields').style.display = delivery === 'messenger' ? 'block' : 'none';
+}
+
+function submitOrder() {
+    const checks = ['c18', 'cVOP', 'cGDPR'];
+    for (const id of checks) {
+        if (!document.getElementById(id).checked) {
+            alert('Prosím potvrďte všechny souhlasy.');
+            return;
+        }
+    }
+
+    const name = document.getElementById('fName').value;
+    const surname = document.getElementById('fSurname').value;
+    const email = document.getElementById('fEmail').value;
+
+    if (!name || !surname || !email) {
+        alert('Prosím vyplňte povinné údaje (jméno, příjmení, e-mail).');
+        return;
+    }
+
+    const delivery = document.getElementById('fDelivery').value;
+    if (delivery === 'messenger') {
+        const street = document.getElementById('fStreet').value;
+        const city = document.getElementById('fCity').value;
+        const zip = document.getElementById('fZip').value;
+        if (!street || !city || !zip) {
+            alert('Prosím vyplňte dodací adresu.');
+            return;
+        }
+    }
+
+    document.getElementById('modalBody').innerHTML = `
+        <div class="success-message">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h3>Objednávka odeslána!</h3>
+            <p>Děkujeme za Vaši objednávku. Potvrzení a platební údaje Vám zašleme na e-mail <strong>${email}</strong>.</p>
+            <p style="margin-top:1rem;">V případě dotazů nás kontaktujte na <a href="mailto:objednavky@vinarstvizelivka.cz" style="color:var(--gold)">objednavky@vinarstvizelivka.cz</a> nebo na tel. 222 075 101.</p>
+        </div>
+    `;
+
+    cart = {};
+    updateCartUI();
+}
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Mobile menu
+function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+}
+
+// Close mobile menu on link click
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('open');
+    });
+});
+
+// Fade in on scroll
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── GALLERY CAROUSEL ──
+const galleryCaptions = [
+    'Vinobraní na vinici Želivka',
+    'Výhled z vinice nad Želivkou',
+    'Vinný sklep v klášteře Sv. Voršily',
+    'Degustace na vinici',
+    'Vinař Martin Jan Stránský na vinici',
+    'Řady vinné révy na jižním svahu',
+    'Vinobraní 2024 — společná radost',
+    'Dubové sudy v klášterním sklepě',
+    'Vína Želivka jako ceny golfového turnaje Panorama',
+    'Zlatá medaile — Solaris 2017, Vinum Gradecense',
+    'Vinobraní — ruční sběr hroznů'
+];
+
+let galleryIndex = 0;
+const gallerySlides = document.querySelectorAll('.gallery-slide');
+const galleryTrack = document.getElementById('galleryTrack');
+const galleryDots = document.getElementById('galleryDots');
+const galleryCaption = document.getElementById('galleryCaption');
+
+// Create dots
+gallerySlides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => galleryGoTo(i);
+    dot.setAttribute('aria-label', `Fotka ${i + 1}`);
+    galleryDots.appendChild(dot);
+});
+
+function galleryGoTo(idx) {
+    galleryIndex = ((idx % gallerySlides.length) + gallerySlides.length) % gallerySlides.length;
+    galleryTrack.style.transform = `translateX(-${galleryIndex * 100}%)`;
+    galleryDots.querySelectorAll('.gallery-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === galleryIndex);
+    });
+    galleryCaption.textContent = galleryCaptions[galleryIndex] || '';
+}
+
+function galleryNav(dir) {
+    galleryGoTo(galleryIndex + dir);
+}
+
+// Auto-advance every 5s
+let galleryTimer = setInterval(() => galleryNav(1), 5000);
+document.getElementById('galleryCarousel').addEventListener('mouseenter', () => clearInterval(galleryTimer));
+document.getElementById('galleryCarousel').addEventListener('mouseleave', () => {
+    galleryTimer = setInterval(() => galleryNav(1), 5000);
+});
+
+// Touch swipe support
+let touchStartX = 0;
+document.getElementById('galleryCarousel').addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+}, {passive: true});
+document.getElementById('galleryCarousel').addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) galleryNav(diff > 0 ? 1 : -1);
+}, {passive: true});
+
+// Set initial caption
+galleryCaption.textContent = galleryCaptions[0];
+
+// Init
+renderWines();
+</script>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-inner">
+        <div class="cookie-text">
+            <h3>Používáme cookies</h3>
+            <p>Tento web používá cookies pro zajištění správného fungování, analýzu návštěvnosti a marketingové účely. Více informací najdete v našich <a href="#" onclick="openPolicy('cookies'); return false;">Zásadách cookies</a>.</p>
+            <div class="cookie-options">
+                <label class="cookie-option disabled">
+                    <input type="checkbox" checked disabled> Funkční (vždy aktivní)
+                </label>
+                <label class="cookie-option">
+                    <input type="checkbox" id="cookieAnalytics"> Statistické (Google Analytics)
+                </label>
+                <label class="cookie-option">
+                    <input type="checkbox" id="cookieMarketing"> Marketingové
+                </label>
+            </div>
+        </div>
+        <div class="cookie-buttons">
+            <button class="btn-cookie btn-cookie-accept" onclick="acceptAllCookies()">Přijmout vše</button>
+            <button class="btn-cookie btn-cookie-save" onclick="saveCookiePrefs()">Uložit předvolby</button>
+            <button class="btn-cookie btn-cookie-reject" onclick="rejectOptionalCookies()">Pouze nezbytné</button>
+        </div>
+    </div>
+</div>
+
+<!-- COOKIE POLICY MODAL -->
+<div class="policy-overlay" id="policyOverlayCookies">
+    <div class="policy-modal">
+        <div class="policy-header">
+            <h2>Zásady cookies</h2>
+            <button class="cart-close" onclick="closePolicy('cookies')">&times;</button>
+        </div>
+        <div class="policy-body">
+            <p class="policy-date">Naposledy aktualizováno: 18. 4. 2024</p>
+
+            <h3>1. Úvod</h3>
+            <p>Naše webové stránky https://www.vinarstvizelivka.cz (dále jen „web") používají cookies a další související technologie. Cookies také vkládají třetí strany, které jsme zapojili. V níže uvedeném dokumentu vás informujeme o používání cookies na našem webu.</p>
+
+            <h3>2. Co jsou soubory cookies?</h3>
+            <p>Soubor cookie je malý jednoduchý soubor, který je odeslán spolu se stránkami tohoto webu a uložen prohlížečem na pevný disk počítače nebo jiného zařízení. Informace v nich uložené mohou být vráceny našim serverům nebo serverům příslušných třetích stran během následné návštěvy.</p>
+
+            <h3>3. Co jsou skripty?</h3>
+            <p>Skript je část programového kódu, který slouží k tomu, aby naše webové stránky fungovaly správně a interaktivně. Tento kód je spuštěn na našem serveru nebo na vašem zařízení.</p>
+
+            <h3>4. Co je to webový maják?</h3>
+            <p>Webový maják (nebo pixelová značka) je malý, neviditelný kus textu nebo obrázku na webu, který se používá ke sledování provozu na webu. Za tímto účelem jsou různá data o vás ukládána pomocí webových majáků.</p>
+
+            <h3>5. Cookies</h3>
+            <p><strong>5.1 Technické nebo funkční soubory cookies</strong></p>
+            <p>Některé soubory cookies zajišťují, že určité části webu fungují správně a že vaše uživatelské preference zůstávají známé. Umístěním funkčních souborů cookies usnadňujeme návštěvu našich webových stránek. Tímto způsobem nemusíte při návštěvě našich webových stránek opakovaně zadávat stejné informace a například položky zůstanou v nákupním košíku, dokud nezaplatíte. Tyto cookies můžeme umístit bez vašeho souhlasu.</p>
+            <p><strong>5.2 Marketingové/Sledovací cookies</strong></p>
+            <p>Marketingové/sledovací cookies jsou soubory cookies nebo jakákoli jiná forma místního úložiště, které se používají k vytváření uživatelských profilů k zobrazování reklamy nebo ke sledování uživatele na tomto webu nebo na několika webech pro podobné marketingové účely.</p>
+
+            <h3>6. Umístěné cookies</h3>
+            <ul>
+                <li><strong>WordPress</strong> — Funkční, nezbytně nutné</li>
+                <li><strong>Google Analytics</strong> — Statistické</li>
+                <li><strong>WPForms</strong> — Předvolby</li>
+            </ul>
+
+            <h3>7. Souhlas</h3>
+            <p>Když poprvé navštívíte náš web, ukážeme vám vyskakovací okno s vysvětlením o cookies. Jakmile kliknete na „Uložit předvolby", vyjadřujete svůj souhlas s používáním kategorií souborů cookies a doplňků popsaných ve vyskakovacím okně a v těchto Zásadách cookies. Používání cookies můžete zakázat pomocí svého prohlížeče, ale mějte na paměti, že naše webové stránky již nemusí fungovat správně.</p>
+
+            <h3>8. Povolení/zakázání a odstranění cookies</h3>
+            <p>Pomocí internetového prohlížeče můžete automaticky nebo ručně mazat soubory cookies. Můžete také určit, že některé soubory cookies nemusí být umístěny. Další možností je změnit nastavení internetového prohlížeče tak, aby se vám při každém uložení souboru cookies zobrazila zpráva.</p>
+            <p>Vezměte prosím na vědomí, že náš web nemusí fungovat správně, pokud jsou deaktivovány všechny cookies. Pokud cookies smažete ve svém prohlížeči, budou znovu umístěny po vašem souhlasu, když znovu navštívíte naše webové stránky.</p>
+
+            <h3>9. Vaše práva týkající se osobních údajů</h3>
+            <ul>
+                <li>Máte právo vědět, proč jsou vaše osobní údaje potřebné, co se s nimi stane a jak dlouho budou uchovány.</li>
+                <li><strong>Právo na přístup:</strong> Máte právo na přístup k vašim osobním údajům, které jsou nám známy.</li>
+                <li><strong>Právo na opravu:</strong> Máte právo doplnit, opravit, odstranit nebo zablokovat vaše osobní údaje, kdykoli budete chtít.</li>
+                <li>Pokud nám udělíte souhlas se zpracováním vašich údajů, máte právo tento souhlas odvolat a nechat vaše osobní údaje smazat.</li>
+                <li><strong>Právo na přenos:</strong> Máte právo vyžádat si od správce všechny vaše osobní údaje a v celém rozsahu je předat jinému správci.</li>
+                <li><strong>Právo na námitku:</strong> Proti zpracování vašich údajů můžete namítat. Řídíme se tím, pokud neexistují oprávněné důvody ke zpracování.</li>
+            </ul>
+
+            <h3>10. Kontaktní údaje</h3>
+            <p>MUDr. Martin Stránský<br>
+            Národní 9, 110 00 Praha 1, Česká republika<br>
+            Web: https://www.vinarstvizelivka.cz<br>
+            E-mail: bayerova@mjs.narodni.cz<br>
+            Tel.: 222 075 101</p>
+            <p style="font-size:0.78rem; color:var(--text-light); margin-top:1rem;">Tyto Zásady cookies byly synchronizovány s cookiedatabase.org dne 7. 10. 2024.</p>
+        </div>
+    </div>
+</div>
+
+<!-- GDPR POLICY MODAL -->
+<div class="policy-overlay" id="policyOverlayGdpr">
+    <div class="policy-modal">
+        <div class="policy-header">
+            <h2>Zásady ochrany osobních údajů</h2>
+            <button class="cart-close" onclick="closePolicy('gdpr')">&times;</button>
+        </div>
+        <div class="policy-body">
+            <h3>I. Základní ustanovení</h3>
+            <p>Správcem osobních údajů podle čl. 4 bod 7 nařízení Evropského parlamentu a Rady (EU) 2016/679 o ochraně fyzických osob v souvislosti se zpracováním osobních údajů a o volném pohybu těchto údajů (dále jen: „GDPR") je <strong>MUDr. Martin Stránský, IČO: 49627929</strong>, se sídlem Národní 9, 110 00 Praha 1 (dále jen: „správce").</p>
+            <p>Kontaktní údaje správce:</p>
+            <ul>
+                <li>Adresa: Národní 9, 110 00 Praha 1</li>
+                <li>E-mail: bayerova@mjs.narodni.cz</li>
+                <li>Telefon: 222 075 101</li>
+            </ul>
+            <p>Osobními údaji se rozumí veškeré informace o identifikované nebo identifikovatelné fyzické osobě; identifikovatelnou fyzickou osobou je fyzická osoba, kterou lze přímo či nepřímo identifikovat, zejména odkazem na určitý identifikátor, například jméno, identifikační číslo, lokační údaje, síťový identifikátor nebo na jeden či více zvláštních prvků fyzické, fyziologické, genetické, psychické, ekonomické, kulturní nebo společenské identity této fyzické osoby.</p>
+            <p>Správce nejmenoval pověřence pro ochranu osobních údajů.</p>
+
+            <h3>II. Zdroje a kategorie zpracovávaných osobních údajů</h3>
+            <p>Správce zpracovává osobní údaje, které jste mu poskytl/a nebo osobní údaje, které správce získal na základě plnění Vaší objednávky.</p>
+            <p>Správce zpracovává Vaše identifikační a kontaktní údaje a údaje nezbytné pro plnění smlouvy.</p>
+
+            <h3>III. Zákonný důvod a účel zpracování osobních údajů</h3>
+            <p>Zákonným důvodem zpracování osobních údajů je:</p>
+            <ul>
+                <li>Plnění smlouvy mezi Vámi a správcem podle čl. 6 odst. 1 písm. b) GDPR</li>
+                <li>Oprávněný zájem správce na poskytování přímého marketingu (zejména pro zasílání obchodních sdělení a newsletterů) podle čl. 6 odst. 1 písm. f) GDPR</li>
+                <li>Váš souhlas se zpracováním pro účely poskytování přímého marketingu podle čl. 6 odst. 1 písm. a) GDPR ve spojení s § 7 odst. 2 zákona č. 480/2004 Sb.</li>
+            </ul>
+            <p>Účelem zpracování osobních údajů je:</p>
+            <ul>
+                <li>Vyřízení Vaší objednávky a výkon práv a povinností vyplývajících ze smluvního vztahu mezi Vámi a správcem; při objednávce jsou vyžadovány osobní údaje, které jsou nutné pro úspěšné vyřízení objednávky (jméno a adresa, kontakt), poskytnutí osobních údajů je nutným požadavkem pro uzavření a plnění smlouvy.</li>
+                <li>Zasílání obchodních sdělení a činění dalších marketingových aktivit.</li>
+            </ul>
+            <p>Ze strany správce nedochází k automatickému individuálnímu rozhodování ve smyslu čl. 22 GDPR.</p>
+
+            <h3>IV. Doba uchovávání údajů</h3>
+            <p>Správce uchovává osobní údaje:</p>
+            <ul>
+                <li>Po dobu nezbytnou k výkonu práv a povinností vyplývajících ze smluvního vztahu mezi Vámi a správcem a uplatňování nároků z těchto smluvních vztahů (po dobu 15 let od ukončení smluvního vztahu).</li>
+                <li>Po dobu, než je odvolán souhlas se zpracováním osobních údajů pro účely marketingu, nejdéle 10 let, jsou-li osobní údaje zpracovávány na základě souhlasu.</li>
+            </ul>
+            <p>Po uplynutí doby uchovávání osobních údajů správce osobní údaje vymaže.</p>
+
+            <h3>V. Příjemci osobních údajů (subdodavatelé správce)</h3>
+            <p>Příjemci osobních údajů jsou osoby:</p>
+            <ul>
+                <li>Podílející se na dodání zboží / služeb / realizaci plateb na základě smlouvy</li>
+                <li>Podílející se na zajištění provozu služeb</li>
+                <li>Zajišťující marketingové služby</li>
+            </ul>
+            <p>Správce nemá úmyslu předat osobní údaje do třetí země (do země mimo EU) nebo mezinárodní organizaci. Příjemci osobních údajů ve třetích zemích jsou poskytovatelé mailingových služeb / cloudových služeb.</p>
+
+            <h3>VI. Vaše práva</h3>
+            <p>Za podmínek stanovených v GDPR máte:</p>
+            <ul>
+                <li>Právo na přístup ke svým osobním údajům dle čl. 15 GDPR</li>
+                <li>Právo na opravu osobních údajů dle čl. 16 GDPR, popřípadě omezení zpracování dle čl. 18 GDPR</li>
+                <li>Právo na výmaz osobních údajů dle čl. 17 GDPR</li>
+                <li>Právo vznést námitku proti zpracování dle čl. 21 GDPR</li>
+                <li>Právo na přenositelnost údajů dle čl. 20 GDPR</li>
+                <li>Právo odvolat souhlas se zpracováním písemně nebo elektronicky na adresu nebo e-mail správce</li>
+            </ul>
+            <p>Dále máte právo podat stížnost u Úřadu pro ochranu osobních údajů v případě, že se domníváte, že bylo porušeno Vaše právo na ochranu osobních údajů.</p>
+
+            <h3>VII. Podmínky zabezpečení osobních údajů</h3>
+            <p>Správce prohlašuje, že přijal veškerá vhodná technická a organizační opatření k zabezpečení osobních údajů.</p>
+            <p>Správce přijal technická opatření k zabezpečení datových úložišť a úložišť osobních údajů v listinné podobě, zejména fyzické zabezpečení údajů v listinné podobě, zabezpečení elektronických údajů pomocí firewallu, antivirového programu a zabezpečení pomocí přístupových hesel.</p>
+            <p>Správce prohlašuje, že k osobním údajům mají přístup pouze jím pověřené osoby.</p>
+
+            <h3>VIII. Závěrečná ustanovení</h3>
+            <p>Odesláním objednávky z internetového objednávkového formuláře potvrzujete, že jste seznámen/a s podmínkami ochrany osobních údajů a že je v celém rozsahu přijímáte.</p>
+            <p>S těmito podmínkami souhlasíte zaškrtnutím souhlasu prostřednictvím internetového formuláře. Zaškrtnutím souhlasu potvrzujete, že jste seznámen/a s podmínkami ochrany osobních údajů a že je v celém rozsahu přijímáte.</p>
+            <p>Správce je oprávněn tyto podmínky změnit. Novou verzi podmínek ochrany osobních údajů zveřejní na svých internetových stránkách, případně Vám zašle novou verzi těchto podmínek na e-mailovou adresu, kterou jste správci poskytl/a.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// ── COOKIE CONSENT ──
+let cookieBannerTimer = null;
+
+function getCookieConsent() {
+    try {
+        return JSON.parse(localStorage.getItem('vz_cookie_consent'));
+    } catch { return null; }
+}
+
+function setCookieConsent(prefs) {
+    prefs.timestamp = new Date().toISOString();
+    localStorage.setItem('vz_cookie_consent', JSON.stringify(prefs));
+}
+
+function showCookieBanner() {
+    cookieBannerTimer = setTimeout(() => {
+        if (!getCookieConsent()) {
+            document.getElementById('cookieBanner').classList.add('visible');
+        }
+    }, 800);
+}
+
+function hideCookieBanner() {
+    if (cookieBannerTimer) { clearTimeout(cookieBannerTimer); cookieBannerTimer = null; }
+    document.getElementById('cookieBanner').classList.remove('visible');
+}
+
+function acceptAllCookies() {
+    setCookieConsent({ functional: true, analytics: true, marketing: true });
+    hideCookieBanner();
+}
+
+function saveCookiePrefs() {
+    setCookieConsent({
+        functional: true,
+        analytics: document.getElementById('cookieAnalytics').checked,
+        marketing: document.getElementById('cookieMarketing').checked
+    });
+    hideCookieBanner();
+}
+
+function rejectOptionalCookies() {
+    setCookieConsent({ functional: true, analytics: false, marketing: false });
+    hideCookieBanner();
+}
+
+function openCookieSettings() {
+    const consent = getCookieConsent();
+    if (consent) {
+        document.getElementById('cookieAnalytics').checked = consent.analytics || false;
+        document.getElementById('cookieMarketing').checked = consent.marketing || false;
+    }
+    document.getElementById('cookieBanner').classList.add('visible');
+}
+
+if (!getCookieConsent()) {
+    showCookieBanner();
+}
+
+// ── POLICY MODALS ──
+function openPolicy(type) {
+    const id = type === 'cookies' ? 'policyOverlayCookies' : 'policyOverlayGdpr';
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+    hideCookieBanner();
+}
+
+function closePolicy(type) {
+    const id = type === 'cookies' ? 'policyOverlayCookies' : 'policyOverlayGdpr';
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+    if (!getCookieConsent()) {
+        document.getElementById('cookieBanner').classList.add('visible');
+    }
+}
+
+document.getElementById('policyOverlayCookies').addEventListener('click', function(e) {
+    if (e.target === this) closePolicy('cookies');
+});
+document.getElementById('policyOverlayGdpr').addEventListener('click', function(e) {
+    if (e.target === this) closePolicy('gdpr');
+});
+</script>
+
+</body>
+</html>
