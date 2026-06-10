@@ -154,10 +154,9 @@
         .hero {
             height: 100vh;
             min-height: 600px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.18), rgba(44,24,16,0.45)),
-                        url('hero.jpg');
+            background: url('hero.jpg');
             background-size: cover;
-            background-position: center 40%;
+            background-position: center 68%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -169,7 +168,7 @@
         .hero-bg {
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(44,24,16,0.2) 0%, rgba(44,24,16,0.4) 60%, rgba(44,24,16,0.7) 100%);
+            background: linear-gradient(180deg, rgba(44,24,16,0.28) 0%, rgba(44,24,16,0) 16%, rgba(44,24,16,0) 55%, rgba(44,24,16,0.32) 100%);
         }
 
         .hero-content {
@@ -180,12 +179,19 @@
         }
 
         .hero-tag {
+            display: inline-block;
             font-size: 0.75rem;
             letter-spacing: 0.3em;
             text-transform: uppercase;
-            color: var(--gold-light);
+            color: #fff;
             margin-bottom: 1.5rem;
-            font-weight: 500;
+            font-weight: 600;
+            background: rgba(44,24,16,0.38);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            padding: 0.45rem 1.1rem 0.45rem 1.4rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.25);
         }
 
         .hero h1 {
@@ -195,15 +201,17 @@
             line-height: 1.15;
             margin-bottom: 1.5rem;
             letter-spacing: -0.01em;
+            text-shadow: 0 2px 14px rgba(44,24,16,0.45);
         }
 
         .hero p {
             font-size: 1.1rem;
             line-height: 1.8;
-            opacity: 0.9;
+            opacity: 0.95;
             max-width: 520px;
             margin: 0 auto 2.5rem;
             font-weight: 300;
+            text-shadow: 0 1px 10px rgba(44,24,16,0.5);
         }
 
         .hero-buttons {
@@ -528,12 +536,13 @@
         }
 
         .wine-image {
-            height: 240px;
+            height: 260px;
             background: linear-gradient(135deg, var(--cream-dark) 0%, #e8e2d8 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            overflow: hidden;
         }
 
         .wine-bottle {
@@ -541,18 +550,54 @@
             opacity: 0.15;
         }
 
+        .wine-image-backdrop {
+            position: absolute;
+            inset: -25%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(32px) saturate(1.1);
+            opacity: 0.45;
+        }
+
+        .wine-image-backdrop::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(250,247,242,0.25) 0%, rgba(250,247,242,0) 40%, rgba(250,247,242,0.35) 100%);
+        }
+
+        .wine-label {
+            position: relative;
+            max-height: 218px;
+            max-width: 72%;
+            border-radius: 3px;
+            box-shadow: 0 14px 30px rgba(44,24,16,0.22), 0 3px 8px rgba(44,24,16,0.12);
+            transition: transform 0.35s ease;
+        }
+
+        .wine-card:hover .wine-label {
+            transform: scale(1.03);
+        }
+
+        @media (min-width: 900px) {
+            .wine-image { height: 310px; }
+            .wine-label { max-height: 266px; }
+        }
+
         .wine-badge {
             position: absolute;
             top: 1rem;
             left: 1rem;
+            z-index: 2;
             background: var(--gold);
             color: white;
-            font-size: 0.65rem;
-            font-weight: 600;
+            font-size: 0.72rem;
+            font-weight: 700;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            padding: 0.3rem 0.8rem;
+            padding: 0.4rem 0.9rem;
             border-radius: 2px;
+            box-shadow: 0 4px 12px rgba(44,24,16,0.3);
         }
 
         .wine-info {
@@ -2182,7 +2227,8 @@ const wines = [
         params: '11,5 % alk. · zbytkový cukr 3,0 g/l · kyseliny 6 g/l',
         desc: 'Perfektně vybalancované, se zlatou barvou, zralé a čisté víno se zemitým charakterem, doplněné tóny citrusů a ananasu.',
         price: 345,
-        badge: 'Novinka'
+        badge: 'Novinka',
+        image: 'labels/cuvee24.png'
     },
     {
         id: 'solaris23',
@@ -2190,7 +2236,8 @@ const wines = [
         params: '11,76 % alk. · zbytkový cukr 1,6 g/l · kyseliny 5,91 g/l',
         desc: 'Lehké, příjemné, suché, svěží aromatické víno, perfektní pro letní pití.',
         price: 295,
-        badge: null
+        badge: null,
+        image: 'labels/solaris23.png'
     },
     {
         id: 'hibernal23',
@@ -2198,7 +2245,8 @@ const wines = [
         params: '10,57 % alk. · zbytkový cukr 1,9 g/l · kyseliny 6,7 g/l',
         desc: 'Citrusové, svěží, skoro perlivé víno s meruňkovou chutí. Při skladování nabývá na komplexnosti.',
         price: 295,
-        badge: null
+        badge: null,
+        image: 'labels/hibernal23.png'
     },
     {
         id: 'hibernal22',
@@ -2206,7 +2254,8 @@ const wines = [
         params: '10,63 % alk. · zbytkový cukr 0,8 g/l · kyseliny 5,5 g/l',
         desc: 'Vynikající zralé suché víno s krásnou vůní, barvou a charakteristickou chutí.',
         price: 325,
-        badge: null
+        badge: null,
+        image: 'labels/hibernal22.png'
     },
     {
         id: 'sekt21',
@@ -2214,7 +2263,8 @@ const wines = [
         params: '11 % alk. · zbytkový cukr 0,5 g/l · kyseliny 8,4 g/l',
         desc: 'Mimořádně vynikající sekt na světové úrovni. Tradiční méthode champenoise. Nádherně perlivý, suchý, svěží a čistý, s chutí meruněk a jemnou bezovou dochutí.',
         price: 695,
-        badge: 'Zlatá medaile'
+        badge: 'Zlatá medaile',
+        image: 'labels/sekt21.png'
     }
 ];
 
@@ -2225,8 +2275,9 @@ function renderWines() {
     grid.innerHTML = wines.map(w => `
         <div class="wine-card">
             <div class="wine-image">
+                ${w.image ? `<div class="wine-image-backdrop" style="background-image:url('${w.image}')"></div>` : ''}
                 ${w.badge ? `<span class="wine-badge">${w.badge}</span>` : ''}
-                <div class="wine-bottle">🍾</div>
+                ${w.image ? `<img class="wine-label" src="${w.image}" alt="Etiketa — ${w.name}" loading="lazy">` : '<div class="wine-bottle">🍾</div>'}
             </div>
             <div class="wine-info">
                 <h3>${w.name}</h3>
@@ -2459,12 +2510,28 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     });
 });
 
-// Fade in on scroll
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.15 });
-
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+// Fade in on scroll (scroll/resize fallback works even where IntersectionObserver doesn't fire, e.g. embedded webviews)
+function revealFadeIns() {
+    document.querySelectorAll('.fade-in:not(.visible)').forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.92 && r.bottom > 0) el.classList.add('visible');
+    });
+}
+let revealPending = false;
+function scheduleReveal() {
+    if (revealPending) return;
+    revealPending = true;
+    setTimeout(() => { revealPending = false; revealFadeIns(); }, 80);
+}
+window.addEventListener('scroll', scheduleReveal, { passive: true });
+window.addEventListener('resize', scheduleReveal);
+window.addEventListener('load', revealFadeIns);
+revealFadeIns();
+// Pojistka pro prostředí, kde scroll eventy nechodí (vestavěné náhledy): periodicky zkontroluj, dokud není vše odhaleno
+const revealTimer = setInterval(() => {
+    revealFadeIns();
+    if (!document.querySelector('.fade-in:not(.visible)')) clearInterval(revealTimer);
+}, 300);
 
 // ── GALLERY CAROUSEL ──
 const galleryCaptions = [
