@@ -584,6 +584,89 @@
             .wine-label { max-height: 266px; }
         }
 
+        .wine-badge-soldout { background: var(--wine-dark); }
+        .wine-card-soldout .wine-label,
+        .wine-card-soldout .wine-image-backdrop { filter: grayscale(0.7) opacity(0.65); }
+        .btn-add-disabled {
+            background: var(--border) !important;
+            color: var(--text-light) !important;
+            cursor: not-allowed;
+            width: 100%;
+        }
+
+        /* ── VĚKOVÁ BRÁNA 18+ ── */
+        .age-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            background: linear-gradient(to bottom, rgba(44,24,16,0.55), rgba(44,24,16,0.75)),
+                        url('hero.jpg');
+            background-size: cover;
+            background-position: center 60%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .age-gate.show { display: flex; }
+        .age-gate-box {
+            background: var(--cream);
+            border-radius: 6px;
+            max-width: 440px;
+            width: 100%;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+        }
+        .age-gate-box .age-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--wine-dark);
+            margin-bottom: 0.5rem;
+        }
+        .age-gate-box h2 {
+            font-family: var(--font-display);
+            font-size: 1.9rem;
+            color: var(--wine-dark);
+            margin-bottom: 0.75rem;
+        }
+        .age-gate-box p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.75rem;
+        }
+        .age-gate-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .age-gate-buttons button {
+            padding: 0.9rem 1.5rem;
+            border: none;
+            border-radius: 3px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .age-yes { background: var(--gold); color: #fff; }
+        .age-yes:hover { background: var(--wine-dark); }
+        .age-no {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border) !important;
+        }
+        .age-no:hover { background: var(--cream-dark); }
+        .age-gate-note {
+            font-size: 0.75rem !important;
+            color: var(--text-light);
+            margin: 1.25rem 0 0 !important;
+        }
+        .age-gate-denied .age-gate-box h2 { color: var(--wine-dark); }
+
         .wine-badge {
             position: absolute;
             top: 1rem;
@@ -1752,6 +1835,54 @@
 </head>
 <body>
 
+<!-- VĚKOVÁ BRÁNA 18+ -->
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="ageGateTitle">
+    <div class="age-gate-box" id="ageGateBox">
+        <div class="age-logo">Vinařství Želivka</div>
+        <h2 id="ageGateTitle">Je vám 18 let nebo více?</h2>
+        <p>Naše stránky nabízejí k prodeji alkoholické nápoje. Vstupem potvrzujete, že jste plnoletí v souladu s právními předpisy České republiky.</p>
+        <div class="age-gate-buttons">
+            <button class="age-yes" onclick="confirmAge()">Ano, je mi 18 a více</button>
+            <button class="age-no" onclick="denyAge()">Ne, je mi méně než 18</button>
+        </div>
+        <p class="age-gate-note">Alkohol se nepodává osobám mladším 18 let. Pijte s mírou.</p>
+    </div>
+</div>
+<script>
+(function () {
+    // Brána se zobrazí, dokud návštěvník nepotvrdí věk (uloženo na 30 dní).
+    var KEY = 'ageVerified';
+    try {
+        var v = localStorage.getItem(KEY);
+        var ok = v && (Date.now() - parseInt(v, 10) < 30 * 24 * 60 * 60 * 1000);
+        if (!ok) {
+            document.getElementById('ageGate').classList.add('show');
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+        }
+    } catch (e) {
+        document.getElementById('ageGate').classList.add('show');
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+    }
+})();
+function confirmAge() {
+    try { localStorage.setItem('ageVerified', String(Date.now())); } catch (e) {}
+    document.getElementById('ageGate').classList.remove('show');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    // Po potvrzení věku případně zobraz cookie lištu
+    try { if (typeof getCookieConsent === 'function' && !getCookieConsent()) showCookieBanner(); } catch (e) {}
+}
+function denyAge() {
+    var box = document.getElementById('ageGateBox');
+    box.innerHTML = '<div class="age-logo">Vinařství Želivka</div>' +
+        '<h2>Mrzí nás to</h2>' +
+        '<p>Na tyto stránky mají přístup pouze osoby starší 18 let. Až vám bude 18, budeme se těšit na vaši návštěvu.</p>' +
+        '<p class="age-gate-note">Pijte s mírou.</p>';
+}
+</script>
+
 <!-- NAV -->
 <nav class="nav" id="nav">
     <a href="#" class="nav-logo">Vinařství Želivka</a>
@@ -2040,7 +2171,7 @@
                     </div>
                     <div>
                         <h4>Objednávky</h4>
-                        <a href="mailto:objednavky@vinarstvizelivka.cz">objednavky@vinarstvizelivka.cz</a>
+                        <a href="mailto:bayerova@mjs.narodni.cz">bayerova@mjs.narodni.cz</a>
                     </div>
                 </div>
                 <div class="contact-item">
@@ -2104,14 +2235,15 @@
             <h4>Kontakt</h4>
             <ul class="footer-links">
                 <li><a href="tel:+420222075101">222 075 101</a></li>
-                <li><a href="mailto:objednavky@vinarstvizelivka.cz">objednavky@vinarstvizelivka.cz</a></li>
+                <li><a href="mailto:bayerova@mjs.narodni.cz">bayerova@mjs.narodni.cz</a></li>
                 <li><a href="#">Národní 9, Praha 1</a></li>
             </ul>
         </div>
     </div>
     <div class="footer-bottom">
         <span>&copy; 2024–2026 Vinařství Želivka. Všechna práva vyhrazena.</span>
-        <div style="display:flex; gap:1.5rem;">
+        <div style="display:flex; gap:1.5rem; flex-wrap:wrap;">
+            <a href="#" onclick="openPolicy('vop'); return false;">Obchodní podmínky</a>
             <a href="#" onclick="openPolicy('cookies'); return false;">Zásady cookies</a>
             <a href="#" onclick="openPolicy('gdpr'); return false;">Ochrana osobních údajů</a>
             <a href="#" onclick="openCookieSettings(); return false;">Nastavení cookies</a>
@@ -2208,7 +2340,7 @@
             </div>
             <div class="form-check">
                 <input type="checkbox" id="cVOP">
-                <label for="cVOP">Souhlasím s <a href="#" onclick="openPolicy('cookies'); return false;">obchodními podmínkami</a> *</label>
+                <label for="cVOP">Souhlasím s <a href="#" onclick="openPolicy('vop'); return false;">obchodními podmínkami</a> *</label>
             </div>
             <div class="form-check">
                 <input type="checkbox" id="cGDPR">
@@ -2220,87 +2352,70 @@
 </div>
 
 <script>
-const wines = [
-    {
-        id: 'cuvee24',
-        name: 'Solaris-Hibernal Cuvée 2024',
-        params: '11,5 % alk. · zbytkový cukr 3,0 g/l · kyseliny 6 g/l',
-        desc: 'Perfektně vybalancované, se zlatou barvou, zralé a čisté víno se zemitým charakterem, doplněné tóny citrusů a ananasu.',
-        price: 345,
-        badge: 'Novinka',
-        image: 'labels/cuvee24.png'
-    },
-    {
-        id: 'solaris23',
-        name: 'Solaris 2023',
-        params: '11,76 % alk. · zbytkový cukr 1,6 g/l · kyseliny 5,91 g/l',
-        desc: 'Lehké, příjemné, suché, svěží aromatické víno, perfektní pro letní pití.',
-        price: 295,
-        badge: null,
-        image: 'labels/solaris23.png'
-    },
-    {
-        id: 'hibernal23',
-        name: 'Hibernal 2023',
-        params: '10,57 % alk. · zbytkový cukr 1,9 g/l · kyseliny 6,7 g/l',
-        desc: 'Citrusové, svěží, skoro perlivé víno s meruňkovou chutí. Při skladování nabývá na komplexnosti.',
-        price: 295,
-        badge: null,
-        image: 'labels/hibernal23.png'
-    },
-    {
-        id: 'hibernal22',
-        name: 'Hibernal 2022',
-        params: '10,63 % alk. · zbytkový cukr 0,8 g/l · kyseliny 5,5 g/l',
-        desc: 'Vynikající zralé suché víno s krásnou vůní, barvou a charakteristickou chutí.',
-        price: 325,
-        badge: null,
-        image: 'labels/hibernal22.png'
-    },
-    {
-        id: 'sekt21',
-        name: 'Sekt 2021',
-        params: '11 % alk. · zbytkový cukr 0,5 g/l · kyseliny 8,4 g/l',
-        desc: 'Mimořádně vynikající sekt na světové úrovni. Tradiční méthode champenoise. Nádherně perlivý, suchý, svěží a čistý, s chutí meruněk a jemnou bezovou dochutí.',
-        price: 695,
-        badge: 'Zlatá medaile',
-        image: 'labels/sekt21.png'
-    }
+// Záložní data pro případ, že se nepodaří načíst data/vina.json
+const FALLBACK_WINES = [
+    { id: 'cuvee24', name: 'Solaris-Hibernal Cuvée 2024', params: '11,5 % alk. · zbytkový cukr 3,0 g/l · kyseliny 6 g/l', desc: 'Perfektně vybalancované, se zlatou barvou, zralé a čisté víno se zemitým charakterem, doplněné tóny citrusů a ananasu.', price: 345, badge: 'Novinka', image: 'labels/cuvee24.png', soldout: false },
+    { id: 'solaris23', name: 'Solaris 2023', params: '11,76 % alk. · zbytkový cukr 1,6 g/l · kyseliny 5,91 g/l', desc: 'Lehké, příjemné, suché, svěží aromatické víno, perfektní pro letní pití.', price: 295, badge: null, image: 'labels/solaris23.png', soldout: false },
+    { id: 'hibernal23', name: 'Hibernal 2023', params: '10,57 % alk. · zbytkový cukr 1,9 g/l · kyseliny 6,7 g/l', desc: 'Citrusové, svěží, skoro perlivé víno s meruňkovou chutí. Při skladování nabývá na komplexnosti.', price: 295, badge: null, image: 'labels/hibernal23.png', soldout: false },
+    { id: 'hibernal22', name: 'Hibernal 2022', params: '10,63 % alk. · zbytkový cukr 0,8 g/l · kyseliny 5,5 g/l', desc: 'Vynikající zralé suché víno s krásnou vůní, barvou a charakteristickou chutí.', price: 325, badge: null, image: 'labels/hibernal22.png', soldout: false },
+    { id: 'sekt21', name: 'Sekt 2021', params: '11 % alk. · zbytkový cukr 0,5 g/l · kyseliny 8,4 g/l', desc: 'Mimořádně vynikající sekt na světové úrovni. Tradiční méthode champenoise. Nádherně perlivý, suchý, svěží a čistý, s chutí meruněk a jemnou bezovou dochutí.', price: 695, badge: 'Zlatá medaile', image: 'labels/sekt21.png', soldout: false }
 ];
 
+let wines = [];
 let cart = {};
+const qtyState = {};
+
+function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 
 function renderWines() {
     const grid = document.getElementById('winesGrid');
-    grid.innerHTML = wines.map(w => `
-        <div class="wine-card">
-            <div class="wine-image">
-                ${w.image ? `<div class="wine-image-backdrop" style="background-image:url('${w.image}')"></div>` : ''}
-                ${w.badge ? `<span class="wine-badge">${w.badge}</span>` : ''}
-                ${w.image ? `<img class="wine-label" src="${w.image}" alt="Etiketa — ${w.name}" loading="lazy">` : '<div class="wine-bottle">🍾</div>'}
-            </div>
-            <div class="wine-info">
-                <h3>${w.name}</h3>
-                <div class="wine-params">${w.params}</div>
-                <div class="wine-desc">${w.desc}</div>
-                <div class="wine-footer">
-                    <div class="wine-price">${w.price} Kč <span>/ 0,7l</span></div>
-                    <div class="wine-add-row">
-                        <div class="wine-quantity">
+    grid.innerHTML = wines.map(w => {
+        const badge = w.soldout ? '<span class="wine-badge wine-badge-soldout">Vyprodáno</span>'
+                                : (w.badge ? `<span class="wine-badge">${esc(w.badge)}</span>` : '');
+        const action = w.soldout
+            ? '<button class="btn-add btn-add-disabled" disabled>Vyprodáno</button>'
+            : `<div class="wine-quantity">
                             <button class="qty-btn" onclick="changeQty('${w.id}', -1)">−</button>
                             <div class="qty-value" id="qty-${w.id}">0</div>
                             <button class="qty-btn" onclick="changeQty('${w.id}', 1)">+</button>
                         </div>
-                        <button class="btn-add" onclick="addToCart('${w.id}')">Do košíku</button>
-                    </div>
+                        <button class="btn-add" onclick="addToCart('${w.id}')">Do košíku</button>`;
+        return `
+        <div class="wine-card${w.soldout ? ' wine-card-soldout' : ''}">
+            <div class="wine-image">
+                ${w.image ? `<div class="wine-image-backdrop" style="background-image:url('${esc(w.image)}')"></div>` : ''}
+                ${badge}
+                ${w.image ? `<img class="wine-label" src="${esc(w.image)}" alt="Etiketa — ${esc(w.name)}" loading="lazy">` : '<div class="wine-bottle">🍾</div>'}
+            </div>
+            <div class="wine-info">
+                <h3>${esc(w.name)}</h3>
+                <div class="wine-params">${esc(w.params)}</div>
+                <div class="wine-desc">${esc(w.desc)}</div>
+                <div class="wine-footer">
+                    <div class="wine-price">${esc(w.price)} Kč <span>/ 0,7l</span></div>
+                    <div class="wine-add-row">${action}</div>
                 </div>
             </div>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 }
 
-const qtyState = {};
-wines.forEach(w => qtyState[w.id] = 0);
+async function loadWines() {
+    try {
+        const r = await fetch('data/vina.json', { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const data = await r.json();
+        if (!Array.isArray(data) || !data.length) throw new Error('prázdná data');
+        wines = data;
+    } catch (e) {
+        console.warn('Načtení data/vina.json selhalo, používám záložní data:', e);
+        wines = FALLBACK_WINES;
+    }
+    wines.forEach(w => { if (qtyState[w.id] == null) qtyState[w.id] = 0; });
+    renderWines();
+}
 
 function changeQty(id, delta) {
     qtyState[id] = Math.max(0, (qtyState[id] || 0) + delta);
@@ -2449,7 +2564,7 @@ function updateShipping() {
     document.getElementById('addressFields').style.display = delivery === 'messenger' ? 'block' : 'none';
 }
 
-function submitOrder() {
+async function submitOrder() {
     const checks = ['c18', 'cVOP', 'cGDPR'];
     for (const id of checks) {
         if (!document.getElementById(id).checked) {
@@ -2458,9 +2573,10 @@ function submitOrder() {
         }
     }
 
-    const name = document.getElementById('fName').value;
-    const surname = document.getElementById('fSurname').value;
-    const email = document.getElementById('fEmail').value;
+    const name = document.getElementById('fName').value.trim();
+    const surname = document.getElementById('fSurname').value.trim();
+    const email = document.getElementById('fEmail').value.trim();
+    const phone = document.getElementById('fPhone').value.trim();
 
     if (!name || !surname || !email) {
         alert('Prosím vyplňte povinné údaje (jméno, příjmení, e-mail).');
@@ -2468,29 +2584,81 @@ function submitOrder() {
     }
 
     const delivery = document.getElementById('fDelivery').value;
+    let street = '', city = '', zip = '';
     if (delivery === 'messenger') {
-        const street = document.getElementById('fStreet').value;
-        const city = document.getElementById('fCity').value;
-        const zip = document.getElementById('fZip').value;
+        street = document.getElementById('fStreet').value.trim();
+        city = document.getElementById('fCity').value.trim();
+        zip = document.getElementById('fZip').value.trim();
         if (!street || !city || !zip) {
             alert('Prosím vyplňte dodací adresu.');
             return;
         }
     }
 
-    document.getElementById('modalBody').innerHTML = `
-        <div class="success-message">
-            <div class="success-icon">
-                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <h3>Objednávka odeslána!</h3>
-            <p>Děkujeme za Vaši objednávku. Potvrzení a platební údaje Vám zašleme na e-mail <strong>${email}</strong>.</p>
-            <p style="margin-top:1rem;">V případě dotazů nás kontaktujte na <a href="mailto:objednavky@vinarstvizelivka.cz" style="color:var(--gold)">objednavky@vinarstvizelivka.cz</a> nebo na tel. 222 075 101.</p>
-        </div>
-    `;
+    if (!Object.keys(cart).length) {
+        alert('Váš košík je prázdný.');
+        return;
+    }
 
-    cart = {};
-    updateCartUI();
+    // Sestavení objednávky
+    const deliveryLabels = { messenger: 'Kurýr Messenger (celá ČR)', pickup: 'Osobní odběr — Národní 9, Praha 1', vineyard: 'Osobní odběr na vinici' };
+    const paymentLabels = { transfer: 'Bankovní převod', cash: 'Hotovost při osobním odběru' };
+    const payment = document.getElementById('fPayment').value;
+
+    let totalItems = 0, subtotal = 0;
+    const items = Object.entries(cart).map(([id, qty]) => {
+        const w = wines.find(x => x.id === id) || { name: id, price: 0 };
+        totalItems += qty;
+        subtotal += w.price * qty;
+        return { id, name: w.name, qty, price: w.price, lineTotal: w.price * qty };
+    });
+    let discount = totalItems >= 12 ? 0.10 : (totalItems >= 6 ? 0.05 : 0);
+    const discountAmount = Math.round(subtotal * discount);
+    const total = subtotal - discountAmount;
+
+    const order = {
+        customer: { name, surname, email, phone },
+        delivery: { method: delivery, label: deliveryLabels[delivery] || delivery, street, city, zip },
+        payment: { method: payment, label: paymentLabels[payment] || payment },
+        items, totalItems, subtotal, discountPercent: discount * 100, discountAmount, total
+    };
+
+    const btn = document.querySelector('.btn-submit-order');
+    const origText = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Odesílám…'; }
+
+    try {
+        const res = await fetch('objednavka.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(order)
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json().catch(() => ({}));
+        if (!data.ok) throw new Error(data.error || 'Neznámá chyba');
+
+        document.getElementById('modalBody').innerHTML = `
+            <div class="success-message">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <h3>Objednávka odeslána!</h3>
+                <p>Děkujeme za Vaši objednávku. Potvrzení a platební údaje Vám zašleme na e-mail <strong>${esc(email)}</strong>.</p>
+                <p style="margin-top:1rem;">V případě dotazů nás kontaktujte na <a href="mailto:bayerova@mjs.narodni.cz" style="color:var(--gold)">bayerova@mjs.narodni.cz</a> nebo na tel. 222 075 101.</p>
+            </div>
+        `;
+        cart = {};
+        updateCartUI();
+    } catch (err) {
+        console.error('Odeslání objednávky selhalo:', err);
+        if (btn) { btn.disabled = false; btn.textContent = origText; }
+        document.getElementById('modalBody').insertAdjacentHTML('afterbegin',
+            `<div style="background:#fdecea;color:#a4271b;border:1px solid #f5c6c2;border-radius:4px;padding:1rem;margin-bottom:1.25rem;font-size:0.9rem;">
+                Objednávku se nepodařilo odeslat. Zkuste to prosím znovu, nebo nám napište na
+                <a href="mailto:bayerova@mjs.narodni.cz" style="color:#a4271b;font-weight:600;">bayerova@mjs.narodni.cz</a>,
+                případně volejte 222 075 101.
+            </div>`);
+    }
 }
 
 // Nav scroll
@@ -2597,7 +2765,7 @@ document.getElementById('galleryCarousel').addEventListener('touchend', e => {
 galleryCaption.textContent = galleryCaptions[0];
 
 // Init
-renderWines();
+loadWines();
 </script>
 
 <!-- COOKIE BANNER -->
@@ -2622,6 +2790,61 @@ renderWines();
             <button class="btn-cookie btn-cookie-accept" onclick="acceptAllCookies()">Přijmout vše</button>
             <button class="btn-cookie btn-cookie-save" onclick="saveCookiePrefs()">Uložit předvolby</button>
             <button class="btn-cookie btn-cookie-reject" onclick="rejectOptionalCookies()">Pouze nezbytné</button>
+        </div>
+    </div>
+</div>
+
+<!-- OBCHODNÍ PODMÍNKY MODAL -->
+<div class="policy-overlay" id="policyOverlayVop">
+    <div class="policy-modal">
+        <div class="policy-header">
+            <h2>Obchodní podmínky</h2>
+            <button class="cart-close" onclick="closePolicy('vop')">&times;</button>
+        </div>
+        <div class="policy-body">
+            <p class="policy-date">Účinné od 1. 6. 2026</p>
+
+            <h3>1. Základní údaje o prodávajícím</h3>
+            <p><strong>MUDr. Martin Stránský</strong><br>
+            Sídlo: Národní 9, 110 00 Praha 1<br>
+            IČO: 49627929<br>
+            E-mail: bayerova@mjs.narodni.cz<br>
+            Telefon: 222 075 101<br>
+            (dále jen „prodávající")</p>
+            <p>Tyto obchodní podmínky upravují v souladu s § 1751 odst. 1 zákona č. 89/2012 Sb., občanský zákoník, vzájemná práva a povinnosti mezi prodávajícím a kupujícím (spotřebitelem) vzniklé v souvislosti s nákupem vína prostřednictvím webových stránek prodávajícího.</p>
+
+            <h3>2. Objednávka a uzavření kupní smlouvy</h3>
+            <p>Kupující vytváří objednávku vyplněním objednávkového formuláře na webu. Před odesláním objednávky má kupující možnost zkontrolovat a měnit zadané údaje. Odesláním objednávky kupující potvrzuje, že se seznámil s těmito obchodními podmínkami a souhlasí s nimi.</p>
+            <p>Objednávka je návrhem na uzavření kupní smlouvy. Kupní smlouva vzniká potvrzením objednávky ze strany prodávajícího, které je zasláno na e-mail kupujícího. Prodávající si vyhrazuje právo objednávku nepotvrdit zejména v případě vyčerpání zásob.</p>
+
+            <h3>3. Ceny a platební podmínky</h3>
+            <p>Ceny vín jsou na webu uvedeny jako konečné, včetně případné DPH. K ceně zboží může být připočteno dopravné dle zvoleného způsobu doručení.</p>
+            <p>Cenu zboží a dopravu lze uhradit:</p>
+            <ul>
+                <li>bezhotovostně bankovním převodem na účet č. <strong>301019565/5500</strong> na základě platebních údajů zaslaných v potvrzení objednávky;</li>
+                <li>v hotovosti při osobním odběru.</li>
+            </ul>
+            <p>Zboží zůstává majetkem prodávajícího do úplného zaplacení kupní ceny.</p>
+
+            <h3>4. Dodací podmínky</h3>
+            <p>Zboží je dle volby kupujícího doručeno kurýrní službou v rámci ČR, nebo připraveno k osobnímu odběru (Národní 9, Praha 1, nebo na vinici po domluvě). O připravení zásilky či možnosti odběru je kupující informován. Zboží je předáno až po úhradě, není-li sjednán osobní odběr s platbou v hotovosti.</p>
+
+            <h3>5. Prodej alkoholických nápojů — věková hranice</h3>
+            <p>Nabízené zboží je alkoholický nápoj. V souladu se zákonem č. 65/2017 Sb., o ochraně zdraví před škodlivými účinky návykových látek, se zboží neprodává osobám mladším 18 let. Odesláním objednávky kupující potvrzuje, že je starší 18 let. Prodávající je oprávněn při předání zboží ověřit věk kupujícího; v případě pochybností či nedosažení 18 let nebude zboží předáno.</p>
+
+            <h3>6. Odstoupení od smlouvy</h3>
+            <p>Kupující, který je spotřebitelem, má právo odstoupit od kupní smlouvy bez udání důvodu ve lhůtě 14 dnů ode dne převzetí zboží, v souladu s § 1829 občanského zákoníku. Pro dodržení lhůty postačuje odeslat odstoupení před jejím uplynutím na e-mail nebo adresu prodávajícího.</p>
+            <p>Zboží vraťte bez zbytečného odkladu, nejpozději do 14 dnů od odstoupení. Náklady na vrácení zboží nese kupující. Prodávající vrátí přijaté peněžní prostředky (vč. nákladů na dodání ve výši nejlevnějšího nabízeného způsobu) do 14 dnů od odstoupení, nejdříve však po obdržení vráceného zboží. Zboží by mělo být vráceno nepoškozené a neotevřené.</p>
+            <p>Spotřebitel nemůže odstoupit od smlouvy zejména v případech uvedených v § 1837 občanského zákoníku.</p>
+
+            <h3>7. Práva z vadného plnění (reklamace)</h3>
+            <p>Práva a povinnosti smluvních stran z vadného plnění se řídí § 2099 a násl. a (u spotřebitele) § 2165 a násl. občanského zákoníku. Kupující je oprávněn uplatnit reklamaci u prodávajícího na uvedené adrese nebo e-mailu. Prodávající rozhodne o reklamaci spotřebitele bez zbytečného odkladu, nejpozději do 30 dnů. Vzhledem k povaze zboží (potravina/víno) je třeba případnou vadu uplatnit bez zbytečného odkladu po jejím zjištění.</p>
+
+            <h3>8. Mimosoudní řešení spotřebitelských sporů</h3>
+            <p>K mimosoudnímu řešení spotřebitelských sporů z kupní smlouvy je příslušná Česká obchodní inspekce, se sídlem Štěpánská 567/15, 120 00 Praha 2, IČO: 00020869, web <a href="https://www.coi.cz" target="_blank" rel="noopener">www.coi.cz</a>. Spotřebitel může využít rovněž platformu pro řešení sporů on-line na adrese <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.</p>
+
+            <h3>9. Závěrečná ustanovení</h3>
+            <p>Ochrana osobních údajů kupujícího se řídí samostatnými zásadami ochrany osobních údajů. Znění obchodních podmínek může prodávající měnit; pro objednávku platí znění účinné k okamžiku jejího odeslání. Tyto podmínky se řídí právem České republiky.</p>
         </div>
     </div>
 </div>
@@ -2824,32 +3047,32 @@ function openCookieSettings() {
     document.getElementById('cookieBanner').classList.add('visible');
 }
 
-if (!getCookieConsent()) {
+// Cookie lištu nezobrazuj, dokud je aktivní věková brána (jinak by se překrývaly)
+if (!getCookieConsent() && !document.getElementById('ageGate').classList.contains('show')) {
     showCookieBanner();
 }
 
 // ── POLICY MODALS ──
+function policyId(type) {
+    return 'policyOverlay' + type.charAt(0).toUpperCase() + type.slice(1);
+}
 function openPolicy(type) {
-    const id = type === 'cookies' ? 'policyOverlayCookies' : 'policyOverlayGdpr';
-    document.getElementById(id).classList.add('open');
+    document.getElementById(policyId(type)).classList.add('open');
     document.body.style.overflow = 'hidden';
     hideCookieBanner();
 }
 
 function closePolicy(type) {
-    const id = type === 'cookies' ? 'policyOverlayCookies' : 'policyOverlayGdpr';
-    document.getElementById(id).classList.remove('open');
+    document.getElementById(policyId(type)).classList.remove('open');
     document.body.style.overflow = '';
     if (!getCookieConsent()) {
         document.getElementById('cookieBanner').classList.add('visible');
     }
 }
 
-document.getElementById('policyOverlayCookies').addEventListener('click', function(e) {
-    if (e.target === this) closePolicy('cookies');
-});
-document.getElementById('policyOverlayGdpr').addEventListener('click', function(e) {
-    if (e.target === this) closePolicy('gdpr');
+['cookies', 'gdpr', 'vop'].forEach(function (type) {
+    const el = document.getElementById(policyId(type));
+    if (el) el.addEventListener('click', function (e) { if (e.target === this) closePolicy(type); });
 });
 </script>
 

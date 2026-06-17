@@ -1,0 +1,52 @@
+[
+  {
+    "id": "cuvee24",
+    "name": "Solaris-Hibernal Cuvée 2024",
+    "params": "11,5 % alk. · zbytkový cukr 3,0 g/l · kyseliny 6 g/l",
+    "desc": "Perfektně vybalancované, se zlatou barvou, zralé a čisté víno se zemitým charakterem, doplněné tóny citrusů a ananasu.",
+    "price": 345,
+    "badge": "Novinka",
+    "image": "labels/cuvee24.png",
+    "soldout": false
+  },
+  {
+    "id": "solaris23",
+    "name": "Solaris 2023",
+    "params": "11,76 % alk. · zbytkový cukr 1,6 g/l · kyseliny 5,91 g/l",
+    "desc": "Lehké, příjemné, suché, svěží aromatické víno, perfektní pro letní pití.",
+    "price": 295,
+    "badge": null,
+    "image": "labels/solaris23.png",
+    "soldout": false
+  },
+  {
+    "id": "hibernal23",
+    "name": "Hibernal 2023",
+    "params": "10,57 % alk. · zbytkový cukr 1,9 g/l · kyseliny 6,7 g/l",
+    "desc": "Citrusové, svěží, skoro perlivé víno s meruňkovou chutí. Při skladování nabývá na komplexnosti.",
+    "price": 295,
+    "badge": null,
+    "image": "labels/hibernal23.png",
+    "soldout": false
+  },
+  {
+    "id": "hibernal22",
+    "name": "Hibernal 2022",
+    "params": "10,63 % alk. · zbytkový cukr 0,8 g/l · kyseliny 5,5 g/l",
+    "desc": "Vynikající zralé suché víno s krásnou vůní, barvou a charakteristickou chutí.",
+    "price": 325,
+    "badge": null,
+    "image": "labels/hibernal22.png",
+    "soldout": false
+  },
+  {
+    "id": "sekt21",
+    "name": "Sekt 2021",
+    "params": "11 % alk. · zbytkový cukr 0,5 g/l · kyseliny 8,4 g/l",
+    "desc": "Mimořádně vynikající sekt na světové úrovni. Tradiční méthode champenoise. Nádherně perlivý, suchý, svěží a čistý, s chutí meruněk a jemnou bezovou dochutí.",
+    "price": 695,
+    "badge": "Zlatá medaile",
+    "image": "labels/sekt21.png",
+    "soldout": false
+  }
+]

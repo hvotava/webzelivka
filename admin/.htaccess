@@ -1,0 +1,12 @@
+Options -Indexes
+
+# Soubor s hashem hesla nesmí být přístupný z webu
+<Files ".heslo">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</Files>

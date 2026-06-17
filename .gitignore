@@ -1,0 +1,9 @@
+# Heslo do administrace (vytvoří se až na serveru při prvním spuštění)
+admin/.heslo
+
+# Netlify (web jde na Webglobe, ne na Netlify)
+.netlify/
+
+# Zdrojové podklady (nepatří na web)
+*.pdf
+*.JPG
