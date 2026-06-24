@@ -1,9 +1,10 @@
 {
-  "order_email": "bayerova@mjs.narodni.cz",
-  "from_email": "bayerova@mjs.narodni.cz",
-  "smtp_server": "",
-  "smtp_port": "587",
-  "smtp_login": "",
-  "smtp_password": "",
-  "smtp_tls": true
+    "order_email": "hvotava@gmail.com",
+    "from_email": "info@synqflows.com",
+    "smtp_server": "imap.websupport.cz",
+    "smtp_port": 587,
+    "smtp_login": "info@synqflows.com",
+    "smtp_password": "Rhone1981+++",
+    "smtp_tls": true,
+    "google_analytics_id": ""
 }

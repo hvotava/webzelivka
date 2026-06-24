@@ -28,6 +28,9 @@ define('SMTP_LOGIN', $__nastaveni['smtp_login'] ?? '');
 define('SMTP_PASSWORD', $__nastaveni['smtp_password'] ?? '');
 define('SMTP_TLS', !empty($__nastaveni['smtp_tls']));
 
+// Google Analytics ID (volitelné).
+define('GOOGLE_ANALYTICS_ID', $__nastaveni['google_analytics_id'] ?? '');
+
 // Název obchodu (používá se v předmětu a textu e-mailů).
 define('SHOP_NAME', 'Vinařství Želivka');
 

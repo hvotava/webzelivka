@@ -204,6 +204,7 @@ if ($loggedIn && $_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '
             $smtpLogin  = trim($_POST['smtp_login'] ?? '');
             $smtpPass   = trim($_POST['smtp_password'] ?? '');
             $smtpTls    = !empty($_POST['smtp_tls']);
+            $gaId       = trim($_POST['google_analytics_id'] ?? '');
 
             if (!filter_var($orderEmail, FILTER_VALIDATE_EMAIL)) {
                 $err = 'E-mail pro objednávky není platná e-mailová adresa.';
@@ -220,6 +221,7 @@ if ($loggedIn && $_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '
                 $nast['smtp_login']  = $smtpLogin;
                 $nast['smtp_password'] = $smtpPass;
                 $nast['smtp_tls']    = $smtpTls;
+                $nast['google_analytics_id'] = $gaId;
                 $msg = save_json(NASTAVENI_FILE, $nast) ? 'Nastavení bylo uloženo.' : 'Uložení selhalo — zkontrolujte práva u data/nastaveni.json.';
             }
             $tab = 'nastaveni';
@@ -455,6 +457,14 @@ $nastaveni = $loggedIn ? load_json(NASTAVENI_FILE, []) : [];
             <label style="display:inline-flex;align-items:center;gap:0.35rem;font-weight:500">
                 <input type="checkbox" name="smtp_tls" value="1" <?= !empty($nastaveni['smtp_tls']) ? 'checked' : '' ?>> Použít TLS/SSL
             </label>
+            <hr style="margin:1.5rem 0;border:none;border-top:1px solid #e5dccf">
+            <h3 style="margin:0.75rem 0 0.5rem;font-size:0.95rem">Google Analytics (volitelné)</h3>
+            <p class="muted" style="margin:0 0 0.75rem">Vložte ID vaší Google Analytics 4 property pro sledování návštěv.</p>
+            <div class="field">
+                <label>Google Analytics ID</label>
+                <input type="text" name="google_analytics_id" value="<?= h($nastaveni['google_analytics_id'] ?? '') ?>" placeholder="např. G-XXXXXXXXXX">
+                <p class="muted" style="margin:0.35rem 0 0">Najdete v Google Analytics → Admin → Property Settings</p>
+            </div>
         </div>
         <div class="sticky-save"><button class="btn" type="submit">Uložit nastavení</button></div>
     </form>

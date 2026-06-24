@@ -8,6 +8,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Google Analytics (načten z administrace) -->
+    <script id="ga-script"></script>
+    <script>
+        fetch('data/nastaveni.json', { cache: 'no-store' })
+            .then(r => r.json())
+            .then(c => {
+                if (c.google_analytics_id) {
+                    const script = document.getElementById('ga-script');
+                    script.src = `https://www.googletagmanager.com/gtag/js?id=${c.google_analytics_id}`;
+                    script.async = true;
+                    window.dataLayer = window.dataLayer || [];
+                    window.gtag = function() { dataLayer.push(arguments); };
+                    gtag('js', new Date());
+                    gtag('config', c.google_analytics_id);
+                }
+            })
+            .catch(() => {});
+    </script>
     <style>
         :root {
             --gold: #b8963e;

@@ -1,0 +1,309 @@
+2026-06-24 09:07:38 — Přijata objednávka
+2026-06-24 09:07:38 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:465
+2026-06-24 09:07:48 — OBJEDNAVKA: Odpověď po připojení: 
+2026-06-24 09:07:48 — OBJEDNAVKA: Chybná odpověď z SMTP serveru
+2026-06-24 09:07:48 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:465
+2026-06-24 09:07:58 — OBJEDNAVKA: Odpověď po připojení: 
+2026-06-24 09:07:58 — OBJEDNAVKA: Chybná odpověď z SMTP serveru
+2026-06-24 09:11:15 — Přijata objednávka
+2026-06-24 09:11:15 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:11:15 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u8-ing.websupport.sk ESMTP
+2026-06-24 09:11:15 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:11:15 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u5-ing.websupport.sk ESMTP
+2026-06-24 09:15:23 — Přijata objednávka
+2026-06-24 09:15:23 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:15:23 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u5-ing.websupport.sk ESMTP
+2026-06-24 09:15:23 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:15:23 — OBJEDNAVKA: EHLO odpověď: 250-m1-u5-ing.websupport.sk
+2026-06-24 09:15:23 — OBJEDNAVKA: Posílám STARTTLS
+2026-06-24 09:15:23 — OBJEDNAVKA: STARTTLS odpověď: 250-PIPELINING
+2026-06-24 09:15:23 — OBJEDNAVKA: STARTTLS selhalo
+2026-06-24 09:15:23 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:15:23 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u5-ing.websupport.sk ESMTP
+2026-06-24 09:15:23 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:15:23 — OBJEDNAVKA: EHLO odpověď: 250-m1-u5-ing.websupport.sk
+2026-06-24 09:15:23 — OBJEDNAVKA: Posílám STARTTLS
+2026-06-24 09:15:23 — OBJEDNAVKA: STARTTLS odpověď: 250-PIPELINING
+2026-06-24 09:15:23 — OBJEDNAVKA: STARTTLS selhalo
+2026-06-24 09:17:15 — Přijata objednávka
+2026-06-24 09:17:15 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:17:15 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u5-ing.websupport.sk ESMTP
+2026-06-24 09:17:15 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:17:15 — OBJEDNAVKA: EHLO odpověď: 250-m1-u5-ing.websupport.sk
+2026-06-24 09:17:15 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:17:15 — OBJEDNAVKA: AUTH odpověď 1: 250-PIPELINING
+2026-06-24 09:17:15 — OBJEDNAVKA: AUTH odpověď 2: 250-SIZE 33554432
+2026-06-24 09:17:15 — OBJEDNAVKA: AUTH odpověď 3: 250-VRFY
+2026-06-24 09:17:15 — OBJEDNAVKA: AUTH selhalo
+2026-06-24 09:17:15 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:17:15 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u5-ing.websupport.sk ESMTP
+2026-06-24 09:17:15 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:17:15 — OBJEDNAVKA: EHLO odpověď: 250-m1-u5-ing.websupport.sk
+2026-06-24 09:17:15 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:17:15 — OBJEDNAVKA: AUTH odpověď 1: 250-PIPELINING
+2026-06-24 09:17:15 — OBJEDNAVKA: AUTH odpověď 2: 250-SIZE 33554432
+2026-06-24 09:17:15 — OBJEDNAVKA: AUTH odpověď 3: 250-VRFY
+2026-06-24 09:17:15 — OBJEDNAVKA: AUTH selhalo
+2026-06-24 09:19:59 — Přijata objednávka
+2026-06-24 09:19:59 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:19:59 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u7-ing.websupport.sk ESMTP
+2026-06-24 09:19:59 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:19:59 — OBJEDNAVKA: EHLO odpověď: 250-m1-u7-ing.websupport.sk
+2026-06-24 09:19:59 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:19:59 — OBJEDNAVKA: AUTH odpověď 1: 250-PIPELINING
+2026-06-24 09:19:59 — OBJEDNAVKA: AUTH odpověď 2: 250-SIZE 33554432
+2026-06-24 09:19:59 — OBJEDNAVKA: AUTH odpověď 3: 250-VRFY
+2026-06-24 09:19:59 — OBJEDNAVKA: AUTH selhalo
+2026-06-24 09:19:59 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:19:59 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u8-ing.websupport.sk ESMTP
+2026-06-24 09:19:59 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:19:59 — OBJEDNAVKA: EHLO odpověď: 250-m1-u8-ing.websupport.sk
+2026-06-24 09:19:59 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:19:59 — OBJEDNAVKA: AUTH odpověď 1: 250-PIPELINING
+2026-06-24 09:19:59 — OBJEDNAVKA: AUTH odpověď 2: 250-SIZE 33554432
+2026-06-24 09:19:59 — OBJEDNAVKA: AUTH odpověď 3: 250-VRFY
+2026-06-24 09:19:59 — OBJEDNAVKA: AUTH selhalo
+2026-06-24 09:22:15 — Přijata objednávka
+2026-06-24 09:22:15 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:22:15 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u9-ing.websupport.sk ESMTP
+2026-06-24 09:22:15 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:22:15 — OBJEDNAVKA: EHLO odpověď: 250-m1-u9-ing.websupport.sk
+250-PIPELINING
+250-SIZE 33554432
+250-VRFY
+250-ETRN
+250-STARTTLS
+250-AUTH PLAIN LOGIN
+250-AUTH=PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250 CHUNKING
+2026-06-24 09:22:15 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:22:15 — OBJEDNAVKA: AUTH odpověď 1: 334 VXNlcm5hbWU6
+2026-06-24 09:22:15 — OBJEDNAVKA: AUTH odpověď 2: 334 UGFzc3dvcmQ6
+2026-06-24 09:22:15 — OBJEDNAVKA: AUTH odpověď 3: 235 2.7.0 Authentication successful
+2026-06-24 09:22:15 — OBJEDNAVKA: MAIL FROM <info@synqflows.com>
+2026-06-24 09:22:15 — OBJEDNAVKA: MAIL FROM odpověď: 250 2.1.0 Ok
+2026-06-24 09:22:15 — OBJEDNAVKA: RCPT TO <hvotava@gmail.com>
+2026-06-24 09:22:15 — OBJEDNAVKA: RCPT TO odpověď: 250 2.1.5 Ok
+2026-06-24 09:22:15 — OBJEDNAVKA: DATA
+2026-06-24 09:22:15 — OBJEDNAVKA: DATA odpověď: 354 End data with <CR><LF>.<CR><LF>
+2026-06-24 09:22:15 — OBJEDNAVKA: Message odpověď: 250 2.0.0 Ok: queued as 4glYKg5cKkz18l6
+2026-06-24 09:22:15 — OBJEDNAVKA: SMTP úspěšně odeslán na hvotava@gmail.com
+2026-06-24 09:22:15 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:22:16 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u7-ing.websupport.sk ESMTP
+2026-06-24 09:22:26 — Přijata objednávka
+2026-06-24 09:22:26 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:22:26 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u7-ing.websupport.sk ESMTP
+2026-06-24 09:22:26 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:22:26 — OBJEDNAVKA: EHLO odpověď: 250-m1-u7-ing.websupport.sk
+250-PIPELINING
+250-SIZE 33554432
+250-VRFY
+250-ETRN
+250-STARTTLS
+250-AUTH PLAIN LOGIN
+250-AUTH=PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250 CHUNKING
+2026-06-24 09:22:26 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:22:26 — OBJEDNAVKA: AUTH odpověď 1: 334 VXNlcm5hbWU6
+2026-06-24 09:22:26 — OBJEDNAVKA: AUTH odpověď 2: 334 UGFzc3dvcmQ6
+2026-06-24 09:22:26 — OBJEDNAVKA: AUTH odpověď 3: 235 2.7.0 Authentication successful
+2026-06-24 09:22:26 — OBJEDNAVKA: MAIL FROM <info@synqflows.com>
+2026-06-24 09:22:26 — OBJEDNAVKA: MAIL FROM odpověď: 250 2.1.0 Ok
+2026-06-24 09:22:26 — OBJEDNAVKA: RCPT TO <hvotava@gmail.com>
+2026-06-24 09:22:26 — OBJEDNAVKA: RCPT TO odpověď: 250 2.1.5 Ok
+2026-06-24 09:22:26 — OBJEDNAVKA: DATA
+2026-06-24 09:22:26 — OBJEDNAVKA: DATA odpověď: 354 End data with <CR><LF>.<CR><LF>
+2026-06-24 09:22:26 — OBJEDNAVKA: Message odpověď: 250 2.0.0 Ok: queued as 4glYKt56PpzVhKB
+2026-06-24 09:22:26 — OBJEDNAVKA: SMTP úspěšně odeslán na hvotava@gmail.com
+2026-06-24 09:22:26 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:22:26 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u5-ing.websupport.sk ESMTP
+2026-06-24 09:25:34 — Přijata objednávka
+2026-06-24 09:25:34 — OBJEDNAVKA: Posílám e-mail PROVOZOVATELI na hvotava@gmail.com
+2026-06-24 09:25:34 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:25:34 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u7-ing.websupport.sk ESMTP
+2026-06-24 09:25:34 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:25:34 — OBJEDNAVKA: EHLO odpověď: 250-m1-u7-ing.websupport.sk
+250-PIPELINING
+250-SIZE 33554432
+250-VRFY
+250-ETRN
+250-STARTTLS
+250-AUTH PLAIN LOGIN
+250-AUTH=PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250 CHUNKING
+2026-06-24 09:25:34 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:25:34 — OBJEDNAVKA: AUTH odpověď 1: 334 VXNlcm5hbWU6
+2026-06-24 09:25:34 — OBJEDNAVKA: AUTH odpověď 2: 334 UGFzc3dvcmQ6
+2026-06-24 09:25:34 — OBJEDNAVKA: AUTH odpověď 3: 235 2.7.0 Authentication successful
+2026-06-24 09:25:34 — OBJEDNAVKA: MAIL FROM <info@synqflows.com>
+2026-06-24 09:25:34 — OBJEDNAVKA: MAIL FROM odpověď: 250 2.1.0 Ok
+2026-06-24 09:25:34 — OBJEDNAVKA: RCPT TO <hvotava@gmail.com>
+2026-06-24 09:25:34 — OBJEDNAVKA: RCPT TO odpověď: 250 2.1.5 Ok
+2026-06-24 09:25:34 — OBJEDNAVKA: DATA
+2026-06-24 09:25:34 — OBJEDNAVKA: DATA odpověď: 354 End data with <CR><LF>.<CR><LF>
+2026-06-24 09:25:34 — OBJEDNAVKA: Message odpověď: 250 2.0.0 Ok: queued as 4glYPV3Q5kzp9rp
+2026-06-24 09:25:34 — OBJEDNAVKA: SMTP úspěšně odeslán na hvotava@gmail.com
+2026-06-24 09:25:34 — OBJEDNAVKA: E-mail provozovateli vrátil: true
+2026-06-24 09:25:34 — OBJEDNAVKA: Posílám e-mail ZÁKAZNÍKOVI na hvotava@gmail.com
+2026-06-24 09:25:34 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:25:34 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u5-ing.websupport.sk ESMTP
+2026-06-24 09:27:34 — Přijata objednávka
+2026-06-24 09:27:34 — OBJEDNAVKA: Posílám e-mail PROVOZOVATELI na hvotava@gmail.com
+2026-06-24 09:27:34 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:27:34 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u7-ing.websupport.sk ESMTP
+2026-06-24 09:27:34 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:27:34 — OBJEDNAVKA: EHLO odpověď: 250-m1-u7-ing.websupport.sk
+250-PIPELINING
+250-SIZE 33554432
+250-VRFY
+250-ETRN
+250-STARTTLS
+250-AUTH PLAIN LOGIN
+250-AUTH=PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250 CHUNKING
+2026-06-24 09:27:34 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:27:34 — OBJEDNAVKA: AUTH odpověď 1: 334 VXNlcm5hbWU6
+2026-06-24 09:27:34 — OBJEDNAVKA: AUTH odpověď 2: 334 UGFzc3dvcmQ6
+2026-06-24 09:27:34 — OBJEDNAVKA: AUTH odpověď 3: 235 2.7.0 Authentication successful
+2026-06-24 09:27:34 — OBJEDNAVKA: MAIL FROM <info@synqflows.com>
+2026-06-24 09:27:34 — OBJEDNAVKA: MAIL FROM odpověď: 250 2.1.0 Ok
+2026-06-24 09:27:34 — OBJEDNAVKA: RCPT TO <hvotava@gmail.com>
+2026-06-24 09:27:34 — OBJEDNAVKA: RCPT TO odpověď: 250 2.1.5 Ok
+2026-06-24 09:27:34 — OBJEDNAVKA: DATA
+2026-06-24 09:27:34 — OBJEDNAVKA: DATA odpověď: 354 End data with <CR><LF>.<CR><LF>
+2026-06-24 09:27:34 — OBJEDNAVKA: Message odpověď: 250 2.0.0 Ok: queued as 4glYRp5sdJzVjbJ
+2026-06-24 09:27:34 — OBJEDNAVKA: SMTP úspěšně odeslán na hvotava@gmail.com
+2026-06-24 09:27:34 — OBJEDNAVKA: E-mail provozovateli vrátil: true
+2026-06-24 09:27:34 — OBJEDNAVKA: Posílám e-mail ZÁKAZNÍKOVI na hvotava@gmail.com
+2026-06-24 09:27:34 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:27:35 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u9-ing.websupport.sk ESMTP
+2026-06-24 09:30:25 — Přijata objednávka
+2026-06-24 09:30:25 — OBJEDNAVKA: Posílám e-mail PROVOZOVATELI na votavatrade@gmail.com
+2026-06-24 09:30:25 — OBJEDNAVKA: Pokusím se o SMTP na votavatrade@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:30:25 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u6-ing.websupport.sk ESMTP
+2026-06-24 09:30:25 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:30:25 — OBJEDNAVKA: EHLO odpověď: 250-m1-u6-ing.websupport.sk
+250-PIPELINING
+250-SIZE 33554432
+250-VRFY
+250-ETRN
+250-STARTTLS
+250-AUTH PLAIN LOGIN
+250-AUTH=PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250 CHUNKING
+2026-06-24 09:30:25 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:30:25 — OBJEDNAVKA: AUTH odpověď 1: 334 VXNlcm5hbWU6
+2026-06-24 09:30:25 — OBJEDNAVKA: AUTH odpověď 2: 334 UGFzc3dvcmQ6
+2026-06-24 09:30:25 — OBJEDNAVKA: AUTH odpověď 3: 235 2.7.0 Authentication successful
+2026-06-24 09:30:25 — OBJEDNAVKA: MAIL FROM <info@synqflows.com>
+2026-06-24 09:30:25 — OBJEDNAVKA: MAIL FROM odpověď: 250 2.1.0 Ok
+2026-06-24 09:30:25 — OBJEDNAVKA: RCPT TO <votavatrade@gmail.com>
+2026-06-24 09:30:25 — OBJEDNAVKA: RCPT TO odpověď: 250 2.1.5 Ok
+2026-06-24 09:30:25 — OBJEDNAVKA: DATA
+2026-06-24 09:30:25 — OBJEDNAVKA: DATA odpověď: 354 End data with <CR><LF>.<CR><LF>
+2026-06-24 09:30:25 — OBJEDNAVKA: Message odpověď: 250 2.0.0 Ok: queued as 4glYW55TfyzqKF
+2026-06-24 09:30:25 — OBJEDNAVKA: SMTP úspěšně odeslán na votavatrade@gmail.com
+2026-06-24 09:30:25 — OBJEDNAVKA: E-mail provozovateli vrátil: true
+2026-06-24 09:30:25 — OBJEDNAVKA: Posílám e-mail ZÁKAZNÍKOVI na hvotava@gmail.com
+2026-06-24 09:30:25 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:30:25 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u9-ing.websupport.sk ESMTP
+2026-06-24 09:33:48 — Přijata objednávka
+2026-06-24 09:33:48 — OBJEDNAVKA: Posílám e-mail PROVOZOVATELI na votavatrade@gmail.com
+2026-06-24 09:33:48 — OBJEDNAVKA: Pokusím se o SMTP na votavatrade@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:33:48 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u6-ing.websupport.sk ESMTP
+2026-06-24 09:33:48 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:33:48 — OBJEDNAVKA: EHLO poslán, čekám odpověď...
+2026-06-24 09:33:48 — OBJEDNAVKA: EHLO odpověď: 250-m1-u6-ing.websupport.sk
+250-PIPELINING
+250-SIZE 33554432
+250-VRFY
+250-ETRN
+250-STARTTLS
+25
+2026-06-24 09:33:48 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:33:48 — OBJEDNAVKA: AUTH odpověď 1: 334 VXNlcm5hbWU6
+2026-06-24 09:33:48 — OBJEDNAVKA: AUTH odpověď 2: 334 UGFzc3dvcmQ6
+2026-06-24 09:33:48 — OBJEDNAVKA: AUTH odpověď 3: 235 2.7.0 Authentication successful
+2026-06-24 09:33:48 — OBJEDNAVKA: MAIL FROM <info@synqflows.com>
+2026-06-24 09:33:48 — OBJEDNAVKA: MAIL FROM odpověď: 250 2.1.0 Ok
+2026-06-24 09:33:48 — OBJEDNAVKA: RCPT TO <votavatrade@gmail.com>
+2026-06-24 09:33:48 — OBJEDNAVKA: RCPT TO odpověď: 250 2.1.5 Ok
+2026-06-24 09:33:48 — OBJEDNAVKA: DATA
+2026-06-24 09:33:48 — OBJEDNAVKA: DATA odpověď: 354 End data with <CR><LF>.<CR><LF>
+2026-06-24 09:33:48 — OBJEDNAVKA: Message odpověď: 250 2.0.0 Ok: queued as 4glYb05MF1zftX
+2026-06-24 09:33:48 — OBJEDNAVKA: SMTP úspěšně odeslán na votavatrade@gmail.com
+2026-06-24 09:33:48 — OBJEDNAVKA: E-mail provozovateli vrátil: true
+2026-06-24 09:33:48 — OBJEDNAVKA: Posílám e-mail ZÁKAZNÍKOVI na hvotava@gmail.com
+2026-06-24 09:33:49 — OBJEDNAVKA: E-mail zákazníkovi (mail()) vrátil: true
+2026-06-24 09:37:55 — Přijata objednávka
+2026-06-24 09:37:55 — OBJEDNAVKA: Posílám e-mail PROVOZOVATELI na info@synqflows.com
+2026-06-24 09:37:55 — OBJEDNAVKA: Pokusím se o SMTP na info@synqflows.com, server=smtp.websupport.cz:587
+2026-06-24 09:37:55 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u8-ing.websupport.sk ESMTP
+2026-06-24 09:37:55 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:37:55 — OBJEDNAVKA: EHLO poslán, čekám odpověď...
+2026-06-24 09:37:55 — OBJEDNAVKA: EHLO odpověď: 250-m1-u8-ing.websupport.sk
+250-PIPELINING
+250-SIZE 33554432
+250-VRFY
+250-ETRN
+250-STARTTLS
+25
+2026-06-24 09:37:55 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:37:55 — OBJEDNAVKA: AUTH odpověď 1: 334 VXNlcm5hbWU6
+2026-06-24 09:37:55 — OBJEDNAVKA: AUTH odpověď 2: 334 UGFzc3dvcmQ6
+2026-06-24 09:37:55 — OBJEDNAVKA: AUTH odpověď 3: 235 2.7.0 Authentication successful
+2026-06-24 09:37:55 — OBJEDNAVKA: MAIL FROM <info@synqflows.com>
+2026-06-24 09:37:55 — OBJEDNAVKA: MAIL FROM odpověď: 250 2.1.0 Ok
+2026-06-24 09:37:55 — OBJEDNAVKA: RCPT TO <info@synqflows.com>
+2026-06-24 09:37:55 — OBJEDNAVKA: RCPT TO odpověď: 250 2.1.5 Ok
+2026-06-24 09:37:55 — OBJEDNAVKA: DATA
+2026-06-24 09:37:55 — OBJEDNAVKA: DATA odpověď: 354 End data with <CR><LF>.<CR><LF>
+2026-06-24 09:37:55 — OBJEDNAVKA: Message odpověď: 250 2.0.0 Ok: queued as 4glYgl2B6bz292l
+2026-06-24 09:37:55 — OBJEDNAVKA: SMTP úspěšně odeslán na info@synqflows.com
+2026-06-24 09:37:55 — OBJEDNAVKA: E-mail provozovateli vrátil: true
+2026-06-24 09:37:55 — OBJEDNAVKA: Posílám e-mail ZÁKAZNÍKOVI na hvotava@gmail.com
+2026-06-24 09:37:55 — OBJEDNAVKA: E-mail zákazníkovi (mail()) vrátil: true
+2026-06-24 09:40:34 — Přijata objednávka
+2026-06-24 09:40:34 — OBJEDNAVKA: Posílám e-mail PROVOZOVATELI na info@synqflows.com
+2026-06-24 09:40:34 — OBJEDNAVKA: Pokusím se o SMTP na info@synqflows.com, server=smtp.websupport.cz:587
+2026-06-24 09:40:34 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u9-ing.websupport.sk ESMTP
+2026-06-24 09:40:34 — OBJEDNAVKA: Posílám EHLO
+2026-06-24 09:40:34 — OBJEDNAVKA: EHLO poslán, čekám odpověď...
+2026-06-24 09:40:34 — OBJEDNAVKA: EHLO odpověď: 250-m1-u9-ing.websupport.sk
+250-PIPELINING
+250-SIZE 33554432
+250-VRFY
+250-ETRN
+250-STARTTLS
+25
+2026-06-24 09:40:34 — OBJEDNAVKA: Posílám AUTH LOGIN
+2026-06-24 09:40:34 — OBJEDNAVKA: AUTH odpověď 1: 334 VXNlcm5hbWU6
+2026-06-24 09:40:35 — OBJEDNAVKA: AUTH odpověď 2: 334 UGFzc3dvcmQ6
+2026-06-24 09:40:35 — OBJEDNAVKA: AUTH odpověď 3: 235 2.7.0 Authentication successful
+2026-06-24 09:40:35 — OBJEDNAVKA: MAIL FROM <info@synqflows.com>
+2026-06-24 09:40:35 — OBJEDNAVKA: MAIL FROM odpověď: 250 2.1.0 Ok
+2026-06-24 09:40:35 — OBJEDNAVKA: RCPT TO <info@synqflows.com>
+2026-06-24 09:40:35 — OBJEDNAVKA: RCPT TO odpověď: 250 2.1.5 Ok
+2026-06-24 09:40:35 — OBJEDNAVKA: DATA
+2026-06-24 09:40:35 — OBJEDNAVKA: DATA odpověď: 354 End data with <CR><LF>.<CR><LF>
+2026-06-24 09:40:35 — OBJEDNAVKA: Message odpověď: 250 2.0.0 Ok: queued as 4glYkq0ncQz21w2
+2026-06-24 09:40:35 — OBJEDNAVKA: SMTP úspěšně odeslán na info@synqflows.com
+2026-06-24 09:40:35 — OBJEDNAVKA: E-mail provozovateli vrátil: true
+2026-06-24 09:40:35 — OBJEDNAVKA: Posílám e-mail ZÁKAZNÍKOVI na hvotava@gmail.com
+2026-06-24 09:40:35 — OBJEDNAVKA: Pokusím se o SMTP na hvotava@gmail.com, server=smtp.websupport.cz:587
+2026-06-24 09:40:35 — OBJEDNAVKA: Odpověď po připojení: 220 m1-u5-ing.websupport.sk ESMTP
