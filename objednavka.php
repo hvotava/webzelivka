@@ -18,17 +18,30 @@ function fail($msg, $code = 400) {
 function send_email($to, $subject, $body, $headers) {
     // Pokud není SMTP nastavený, používáme mail()
     if (empty(SMTP_SERVER)) {
-        return @mail($to, $subject, $body, $headers);
+        error_log("OBJEDNAVKA: Posílám mail() na {$to} (SMTP není konfigurován)");
+        $result = @mail($to, $subject, $body, $headers);
+        error_log("OBJEDNAVKA: mail() vrátil " . ($result ? "true" : "false"));
+        return $result;
     }
+
+    error_log("OBJEDNAVKA: Pokusím se o SMTP na {$to}, server=" . SMTP_SERVER . ":" . SMTP_PORT);
 
     try {
         // Připoj se k SMTP serveru
         $socket = @fsockopen(SMTP_SERVER, SMTP_PORT, $errno, $errstr, 10);
-        if (!$socket) return @mail($to, $subject, $body, $headers);
+        if (!$socket) {
+            error_log("OBJEDNAVKA: Nemůžu se připojit k SMTP ({$errno}: {$errstr})");
+            return @mail($to, $subject, $body, $headers);
+        }
 
         stream_set_timeout($socket, 10);
         $resp = fgets($socket, 512);
-        if (strpos($resp, '220') === false) { fclose($socket); return @mail($to, $subject, $body, $headers); }
+        error_log("OBJEDNAVKA: Odpověď po připojení: " . trim($resp));
+        if (strpos($resp, '220') === false) {
+            error_log("OBJEDNAVKA: Chybná odpověď z SMTP serveru");
+            fclose($socket);
+            return @mail($to, $subject, $body, $headers);
+        }
 
         // EHLO
         fwrite($socket, "EHLO " . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost') . "\r\n");
@@ -86,8 +99,10 @@ function send_email($to, $subject, $body, $headers) {
         // QUIT
         fwrite($socket, "QUIT\r\n");
         fclose($socket);
+        error_log("OBJEDNAVKA: SMTP úspěšně odeslán na {$to}");
         return true;
     } catch (Exception $e) {
+        error_log("OBJEDNAVKA: SMTP exception: " . $e->getMessage());
         return @mail($to, $subject, $body, $headers);
     }
 }
