@@ -51,17 +51,29 @@ function send_email($to, $subject, $body, $headers) {
             return @mail($to, $subject, $body, $headers);
         }
 
+        // Čti odpovědi se čtením všech řádků (250- znamená pokračování)
+        function smtp_read_response($socket) {
+            $resp = '';
+            while (true) {
+                $line = fgets($socket, 512);
+                if (!$line) break;
+                $resp .= $line;
+                if (preg_match('/^\d{3} /', $line)) break; // Poslední řádek (bez pomlčky)
+            }
+            return $resp;
+        }
+
         // EHLO
         log_msg("OBJEDNAVKA: Posílám EHLO");
         fwrite($socket, "EHLO " . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost') . "\r\n");
-        $resp = fgets($socket, 512);
+        $resp = smtp_read_response($socket);
         log_msg("OBJEDNAVKA: EHLO odpověď: " . trim($resp));
 
         // STARTTLS (pokud je nastaveno)
         if (SMTP_TLS) {
             log_msg("OBJEDNAVKA: Posílám STARTTLS");
             fwrite($socket, "STARTTLS\r\n");
-            $resp = fgets($socket, 512);
+            $resp = smtp_read_response($socket);
             log_msg("OBJEDNAVKA: STARTTLS odpověď: " . trim($resp));
             if (strpos($resp, '220') === false) { log_msg("OBJEDNAVKA: STARTTLS selhalo"); fclose($socket); return @mail($to, $subject, $body, $headers); }
 
@@ -73,7 +85,7 @@ function send_email($to, $subject, $body, $headers) {
             }
             log_msg("OBJEDNAVKA: TLS je aktivní, znovu EHLO");
             fwrite($socket, "EHLO " . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost') . "\r\n");
-            $resp = fgets($socket, 512);
+            $resp = smtp_read_response($socket);
             log_msg("OBJEDNAVKA: EHLO po TLS: " . trim($resp));
         }
 
@@ -81,16 +93,16 @@ function send_email($to, $subject, $body, $headers) {
         if (!empty(SMTP_LOGIN) && !empty(SMTP_PASSWORD)) {
             log_msg("OBJEDNAVKA: Posílám AUTH LOGIN");
             fwrite($socket, "AUTH LOGIN\r\n");
-            $resp = fgets($socket, 512);
+            $resp = smtp_read_response($socket);
             log_msg("OBJEDNAVKA: AUTH odpověď 1: " . trim($resp));
             fwrite($socket, base64_encode(SMTP_LOGIN) . "\r\n");
-            $resp = fgets($socket, 512);
+            $resp = smtp_read_response($socket);
             log_msg("OBJEDNAVKA: AUTH odpověď 2: " . trim($resp));
             fwrite($socket, base64_encode(SMTP_PASSWORD) . "\r\n");
-            $resp = fgets($socket, 512);
+            $resp = smtp_read_response($socket);
             log_msg("OBJEDNAVKA: AUTH odpověď 3: " . trim($resp));
             if (strpos($resp, '235') === false && strpos($resp, '2.7') === false) {
-                log_msg("OBJEDNAVKA: AUTH selhalo");
+                log_msg("OBJEDNAVKA: AUTH selhalo - " . trim($resp));
                 fclose($socket);
                 return @mail($to, $subject, $body, $headers);
             }
@@ -99,25 +111,25 @@ function send_email($to, $subject, $body, $headers) {
         // MAIL FROM
         log_msg("OBJEDNAVKA: MAIL FROM <" . FROM_EMAIL . ">");
         fwrite($socket, "MAIL FROM:<" . FROM_EMAIL . ">\r\n");
-        $resp = fgets($socket, 512);
+        $resp = smtp_read_response($socket);
         log_msg("OBJEDNAVKA: MAIL FROM odpověď: " . trim($resp));
 
         // RCPT TO
         log_msg("OBJEDNAVKA: RCPT TO <{$to}>");
         fwrite($socket, "RCPT TO:<{$to}>\r\n");
-        $resp = fgets($socket, 512);
+        $resp = smtp_read_response($socket);
         log_msg("OBJEDNAVKA: RCPT TO odpověď: " . trim($resp));
 
         // DATA
         log_msg("OBJEDNAVKA: DATA");
         fwrite($socket, "DATA\r\n");
-        $resp = fgets($socket, 512);
+        $resp = smtp_read_response($socket);
         log_msg("OBJEDNAVKA: DATA odpověď: " . trim($resp));
 
         // Message (headers + subject + body)
         $msg = "Subject: {$subject}\r\n{$headers}\r\n\r\n{$body}";
         fwrite($socket, $msg . "\r\n.\r\n");
-        $resp = fgets($socket, 512);
+        $resp = smtp_read_response($socket);
         log_msg("OBJEDNAVKA: Message odpověď: " . trim($resp));
 
         // QUIT
