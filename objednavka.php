@@ -14,6 +14,16 @@ function log_msg($msg) {
     @file_put_contents($logFile, date('Y-m-d H:i:s') . " — " . $msg . "\n", FILE_APPEND);
 }
 
+function load_json($file, $default = []) {
+    if (!is_file($file)) return $default;
+    $data = json_decode(file_get_contents($file), true);
+    return is_array($data) ? $data : $default;
+}
+
+function save_json($file, $data) {
+    @file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+}
+
 log_msg("Přijata objednávka");
 
 function fail($msg, $code = 400) {
