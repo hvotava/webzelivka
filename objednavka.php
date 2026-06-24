@@ -52,57 +52,73 @@ function send_email($to, $subject, $body, $headers) {
         }
 
         // EHLO
+        log_msg("OBJEDNAVKA: Posílám EHLO");
         fwrite($socket, "EHLO " . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost') . "\r\n");
-        fgets($socket, 512);
+        $resp = fgets($socket, 512);
+        log_msg("OBJEDNAVKA: EHLO odpověď: " . trim($resp));
 
         // STARTTLS (pokud je nastaveno)
         if (SMTP_TLS) {
+            log_msg("OBJEDNAVKA: Posílám STARTTLS");
             fwrite($socket, "STARTTLS\r\n");
             $resp = fgets($socket, 512);
-            if (strpos($resp, '220') === false) { fclose($socket); return @mail($to, $subject, $body, $headers); }
+            log_msg("OBJEDNAVKA: STARTTLS odpověď: " . trim($resp));
+            if (strpos($resp, '220') === false) { log_msg("OBJEDNAVKA: STARTTLS selhalo"); fclose($socket); return @mail($to, $subject, $body, $headers); }
 
-            $ctx = stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]);
-            stream_context_set_option($socket, 'ssl', 'verify_peer', false);
-            stream_context_set_option($socket, 'ssl', 'verify_peer_name', false);
+            log_msg("OBJEDNAVKA: Aktivuji TLS...");
             if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+                log_msg("OBJEDNAVKA: TLS aktivace selhala");
                 fclose($socket);
                 return @mail($to, $subject, $body, $headers);
             }
-            // Po TLS znovu EHLO
+            log_msg("OBJEDNAVKA: TLS je aktivní, znovu EHLO");
             fwrite($socket, "EHLO " . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost') . "\r\n");
-            fgets($socket, 512);
+            $resp = fgets($socket, 512);
+            log_msg("OBJEDNAVKA: EHLO po TLS: " . trim($resp));
         }
 
         // AUTH LOGIN (pokud je login vyplněn)
         if (!empty(SMTP_LOGIN) && !empty(SMTP_PASSWORD)) {
+            log_msg("OBJEDNAVKA: Posílám AUTH LOGIN");
             fwrite($socket, "AUTH LOGIN\r\n");
-            fgets($socket, 512);
+            $resp = fgets($socket, 512);
+            log_msg("OBJEDNAVKA: AUTH odpověď 1: " . trim($resp));
             fwrite($socket, base64_encode(SMTP_LOGIN) . "\r\n");
-            fgets($socket, 512);
+            $resp = fgets($socket, 512);
+            log_msg("OBJEDNAVKA: AUTH odpověď 2: " . trim($resp));
             fwrite($socket, base64_encode(SMTP_PASSWORD) . "\r\n");
             $resp = fgets($socket, 512);
+            log_msg("OBJEDNAVKA: AUTH odpověď 3: " . trim($resp));
             if (strpos($resp, '235') === false && strpos($resp, '2.7') === false) {
+                log_msg("OBJEDNAVKA: AUTH selhalo");
                 fclose($socket);
                 return @mail($to, $subject, $body, $headers);
             }
         }
 
         // MAIL FROM
+        log_msg("OBJEDNAVKA: MAIL FROM <" . FROM_EMAIL . ">");
         fwrite($socket, "MAIL FROM:<" . FROM_EMAIL . ">\r\n");
-        fgets($socket, 512);
+        $resp = fgets($socket, 512);
+        log_msg("OBJEDNAVKA: MAIL FROM odpověď: " . trim($resp));
 
         // RCPT TO
+        log_msg("OBJEDNAVKA: RCPT TO <{$to}>");
         fwrite($socket, "RCPT TO:<{$to}>\r\n");
-        fgets($socket, 512);
+        $resp = fgets($socket, 512);
+        log_msg("OBJEDNAVKA: RCPT TO odpověď: " . trim($resp));
 
         // DATA
+        log_msg("OBJEDNAVKA: DATA");
         fwrite($socket, "DATA\r\n");
-        fgets($socket, 512);
+        $resp = fgets($socket, 512);
+        log_msg("OBJEDNAVKA: DATA odpověď: " . trim($resp));
 
         // Message (headers + subject + body)
         $msg = "Subject: {$subject}\r\n{$headers}\r\n\r\n{$body}";
         fwrite($socket, $msg . "\r\n.\r\n");
-        fgets($socket, 512);
+        $resp = fgets($socket, 512);
+        log_msg("OBJEDNAVKA: Message odpověď: " . trim($resp));
 
         // QUIT
         fwrite($socket, "QUIT\r\n");
