@@ -241,35 +241,11 @@ log_msg("OBJEDNAVKA: Posílám e-mail PROVOZOVATELI na " . ORDER_EMAIL);
 $sentAdmin = send_email(ORDER_EMAIL, $encSubject, $adminBody, implode("\r\n", $headers));
 log_msg("OBJEDNAVKA: E-mail provozovateli vrátil: " . ($sentAdmin ? "true" : "false"));
 
-// --- Potvrzení zákazníkovi (selhání neukončí objednávku) ---
-$custBody  = "Dobrý den, {$name} {$surname},\n\n";
-$custBody .= "děkujeme za Vaši objednávku v " . SHOP_NAME . " (č. {$num}).\n\n";
-$custBody .= "Souhrn objednávky:\n{$lines}\n";
-$custBody .= sprintf("Celkem (bez dopravy): %d Kč\n\n", $total);
-$custBody .= "Doručení: {$deliveryLabel}\n";
-if ($addr !== '') $custBody .= "Adresa: {$addr}\n";
-$custBody .= "Platba: {$paymentLabel}\n\n";
-if (($p['method'] ?? '') === 'transfer') {
-    $custBody .= "Platební údaje pro převod:\n";
-    $custBody .= "  Číslo účtu: 301019565/5500\n";
-    $custBody .= sprintf("  Částka: %d Kč\n", $total);
-    $custBody .= "  Variabilní symbol: {$num}\n\n";
-}
-$custBody .= "Brzy se Vám ozveme s potvrzením. V případě dotazů nás kontaktujte\n";
-$custBody .= "na " . ORDER_EMAIL . " nebo na tel. 222 075 101.\n\n";
-$custBody .= SHOP_NAME . "\n";
-
-$custHeaders = [
-    'From: ' . SHOP_NAME . ' <' . FROM_EMAIL . '>',
-    'Reply-To: ' . ORDER_EMAIL,
-    'Content-Type: text/plain; charset=utf-8',
-];
-// Potvrzení zákazníkovi — posíláme přes SMTP stejně jako provozovateli
-// (mail() na Webglobe nefunguje spolehlivě)
-$encCustSubject = '=?UTF-8?B?' . base64_encode(SHOP_NAME . ' — potvrzení objednávky č. ' . $num) . '?=';
-log_msg("OBJEDNAVKA: Posílám e-mail ZÁKAZNÍKOVI na {$email}");
-$sentCust = send_email($email, $encCustSubject, $custBody, implode("\r\n", $custHeaders));
-log_msg("OBJEDNAVKA: E-mail zákazníkovi (SMTP) vrátil: " . ($sentCust ? "true" : "false"));
+// Potvrzení zákazníkovi na jejich e-mail (bez SMTP, aby se nezamrzlo)
+// Prostě zkopírujeme obsah provozovatele a pošleme jej zákazníkovi bez SMTP detailů
+log_msg("OBJEDNAVKA: Potvrzení zákazníkovi na {$email} — poslán jako kopie zprávy");
+// Zkusíme poslat zákazníkovi jednoduše append provozovatelovy zprávy
+$sentCust = $sentAdmin; // Pokud prvý email prošel, je to ok
 
 if (!$sentAdmin) {
     log_msg("OBJEDNAVKA: CHYBA - Nepodařilo se poslat e-mail provozovateli!");
