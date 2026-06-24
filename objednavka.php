@@ -23,7 +23,7 @@ function fail($msg, $code = 400) {
 }
 
 /** Pošle e-mail přes SMTP nebo mail(), vrátí true/false. */
-function send_email($to, $subject, $body, $headers) {
+function send_email($to, $subject, $body, $headers, $cc = null) {
     // Pokud není SMTP nastavený, používáme mail()
     if (empty(SMTP_SERVER)) {
         log_msg("OBJEDNAVKA: Posílám mail() na {$to} (SMTP není konfigurován)");
@@ -124,11 +124,19 @@ function send_email($to, $subject, $body, $headers) {
         $resp = smtp_read_response($socket);
         log_msg("OBJEDNAVKA: MAIL FROM odpověď: " . trim($resp));
 
-        // RCPT TO
+        // RCPT TO (hlavní příjemce)
         log_msg("OBJEDNAVKA: RCPT TO <{$to}>");
         fwrite($socket, "RCPT TO:<{$to}>\r\n");
         $resp = smtp_read_response($socket);
         log_msg("OBJEDNAVKA: RCPT TO odpověď: " . trim($resp));
+
+        // RCPT TO (CC - je-li zadán)
+        if ($cc) {
+            log_msg("OBJEDNAVKA: RCPT TO (Cc) <{$cc}>");
+            fwrite($socket, "RCPT TO:<{$cc}>\r\n");
+            $resp = smtp_read_response($socket);
+            log_msg("OBJEDNAVKA: RCPT TO Cc odpověď: " . trim($resp));
+        }
 
         // DATA
         log_msg("OBJEDNAVKA: DATA");
@@ -232,20 +240,16 @@ $adminBody .= sprintf("  CELKEM (bez dopravy): %d Kč\n", $total);
 $subject = SHOP_NAME . " — nová objednávka č. {$num}";
 $headers = [
     'From: ' . SHOP_NAME . ' <' . FROM_EMAIL . '>',
+    'To: ' . ORDER_EMAIL,
+    'Cc: ' . $email,
     'Reply-To: ' . $name . ' ' . $surname . ' <' . $email . '>',
     'Content-Type: text/plain; charset=utf-8',
     'X-Mailer: PHP/' . phpversion(),
 ];
 $encSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
-log_msg("OBJEDNAVKA: Posílám e-mail PROVOZOVATELI na " . ORDER_EMAIL);
-$sentAdmin = send_email(ORDER_EMAIL, $encSubject, $adminBody, implode("\r\n", $headers));
-log_msg("OBJEDNAVKA: E-mail provozovateli vrátil: " . ($sentAdmin ? "true" : "false"));
-
-// Potvrzení zákazníkovi na jejich e-mail (bez SMTP, aby se nezamrzlo)
-// Prostě zkopírujeme obsah provozovatele a pošleme jej zákazníkovi bez SMTP detailů
-log_msg("OBJEDNAVKA: Potvrzení zákazníkovi na {$email} — poslán jako kopie zprávy");
-// Zkusíme poslat zákazníkovi jednoduše append provozovatelovy zprávy
-$sentCust = $sentAdmin; // Pokud prvý email prošel, je to ok
+log_msg("OBJEDNAVKA: Posílám e-mail PROVOZOVATELI na " . ORDER_EMAIL . " (Cc: {$email})");
+$sentAdmin = send_email(ORDER_EMAIL, $encSubject, $adminBody, implode("\r\n", $headers), $email);
+log_msg("OBJEDNAVKA: E-mail s CC vrátil: " . ($sentAdmin ? "true" : "false"));
 
 if (!$sentAdmin) {
     log_msg("OBJEDNAVKA: CHYBA - Nepodařilo se poslat e-mail provozovateli!");
