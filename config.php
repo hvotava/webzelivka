@@ -5,11 +5,21 @@
  * nic nevypíše a navíc je chráněn pravidlem v .htaccess.
  */
 
-// E-mail, na který chodí objednávky z e-shopu (provozovatel).
-define('ORDER_EMAIL', 'bayerova@mjs.narodni.cz');
+// Soubor s nastavením editovatelným z administrace (e-maily apod.).
+define('NASTAVENI_FILE', __DIR__ . '/data/nastaveni.json');
 
-// Odesílatel automatických e-mailů.
-define('FROM_EMAIL', 'bayerova@mjs.narodni.cz');
+// Načtení nastavení z administrace (pokud existuje), jinak výchozí hodnoty níže.
+$__nastaveni = [];
+if (is_file(NASTAVENI_FILE)) {
+    $__n = json_decode(file_get_contents(NASTAVENI_FILE), true);
+    if (is_array($__n)) $__nastaveni = $__n;
+}
+
+// E-mail, na který chodí objednávky z e-shopu (provozovatel). Mění se v administraci.
+define('ORDER_EMAIL', !empty($__nastaveni['order_email']) ? $__nastaveni['order_email'] : 'bayerova@mjs.narodni.cz');
+
+// Odesílatel automatických e-mailů. Mění se v administraci.
+define('FROM_EMAIL', !empty($__nastaveni['from_email']) ? $__nastaveni['from_email'] : 'bayerova@mjs.narodni.cz');
 
 // Název obchodu (používá se v předmětu a textu e-mailů).
 define('SHOP_NAME', 'Vinařství Želivka');

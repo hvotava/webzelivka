@@ -69,7 +69,7 @@ function csrf_ok() { return isset($_POST['csrf']) && hash_equals($_SESSION['csrf
 $err = ''; $msg = '';
 $hasPassword = is_file(ADMIN_HASH_FILE) && trim(file_get_contents(ADMIN_HASH_FILE)) !== '';
 $tab = $_GET['tab'] ?? 'vina';
-if (!in_array($tab, ['vina', 'texty', 'galerie'], true)) $tab = 'vina';
+if (!in_array($tab, ['vina', 'texty', 'galerie', 'nastaveni'], true)) $tab = 'vina';
 
 // ---------- Odhlášení ----------
 if (isset($_GET['logout'])) { $_SESSION = []; session_destroy(); header('Location: index.php'); exit; }
@@ -194,12 +194,30 @@ if ($loggedIn && $_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '
             $msg = save_json(GALERIE_FILE, $result) ? 'Galerie byla uložena.' : 'Uložení selhalo — zkontrolujte práva u data/galerie.json.';
             $tab = 'galerie';
         }
+
+        // --- Uložení nastavení (e-maily) ---
+        if ($action === 'save_nastaveni') {
+            $orderEmail = trim($_POST['order_email'] ?? '');
+            $fromEmail  = trim($_POST['from_email'] ?? '');
+            if (!filter_var($orderEmail, FILTER_VALIDATE_EMAIL)) {
+                $err = 'E-mail pro objednávky není platná e-mailová adresa.';
+            } elseif ($fromEmail !== '' && !filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
+                $err = 'E-mail odesílatele není platná e-mailová adresa.';
+            } else {
+                $nast = load_json(NASTAVENI_FILE, []);
+                $nast['order_email'] = $orderEmail;
+                $nast['from_email']  = $fromEmail !== '' ? $fromEmail : $orderEmail;
+                $msg = save_json(NASTAVENI_FILE, $nast) ? 'Nastavení bylo uloženo.' : 'Uložení selhalo — zkontrolujte práva u data/nastaveni.json.';
+            }
+            $tab = 'nastaveni';
+        }
     }
 }
 
-$wines   = $loggedIn ? load_json(DATA_FILE, []) : [];
-$obsah   = $loggedIn ? load_json(OBSAH_FILE, []) : [];
-$galerie = $loggedIn ? load_json(GALERIE_FILE, []) : [];
+$wines     = $loggedIn ? load_json(DATA_FILE, []) : [];
+$obsah     = $loggedIn ? load_json(OBSAH_FILE, []) : [];
+$galerie   = $loggedIn ? load_json(GALERIE_FILE, []) : [];
+$nastaveni = $loggedIn ? load_json(NASTAVENI_FILE, []) : [];
 ?>
 <!DOCTYPE html>
 <html lang="cs">
@@ -286,6 +304,7 @@ $galerie = $loggedIn ? load_json(GALERIE_FILE, []) : [];
         <a class="tab <?= $tab === 'vina' ? 'active' : '' ?>" href="?tab=vina">Vína</a>
         <a class="tab <?= $tab === 'texty' ? 'active' : '' ?>" href="?tab=texty">Texty</a>
         <a class="tab <?= $tab === 'galerie' ? 'active' : '' ?>" href="?tab=galerie">Galerie</a>
+        <a class="tab <?= $tab === 'nastaveni' ? 'active' : '' ?>" href="?tab=nastaveni">Nastavení</a>
     </div>
 
     <?php if ($msg): ?><div class="alert alert-ok"><?= h($msg) ?></div><?php endif; ?>
@@ -358,7 +377,7 @@ $galerie = $loggedIn ? load_json(GALERIE_FILE, []) : [];
         <div class="sticky-save"><button class="btn" type="submit">Uložit texty</button></div>
     </form>
 
-    <?php else: // ===== GALERIE ===== ?>
+    <?php elseif ($tab === 'galerie'): // ===== GALERIE ===== ?>
     <p class="muted">Spravujte fotky v galerii na hlavní stránce. „Popisek" se zobrazí pod fotkou, „Pořadí" určuje řazení.</p>
     <form method="post" enctype="multipart/form-data">
         <input type="hidden" name="csrf" value="<?= h($_SESSION['csrf']) ?>">
@@ -387,6 +406,26 @@ $galerie = $loggedIn ? load_json(GALERIE_FILE, []) : [];
             <p class="muted">Fotka se přidá po uložení.</p>
         </div>
         <div class="sticky-save"><button class="btn" type="submit">Uložit galerii</button></div>
+    </form>
+
+    <?php else: // ===== NASTAVENÍ ===== ?>
+    <p class="muted">E-mailové adresy pro e-shop. Po uložení se ihned použijí pro nové objednávky.</p>
+    <form method="post">
+        <input type="hidden" name="csrf" value="<?= h($_SESSION['csrf']) ?>">
+        <input type="hidden" name="action" value="save_nastaveni">
+        <div class="card">
+            <div class="field">
+                <label>E-mail pro příjem objednávek</label>
+                <input type="text" name="order_email" value="<?= h($nastaveni['order_email'] ?? ORDER_EMAIL) ?>">
+                <p class="muted" style="margin:0.35rem 0 0">Na tuto adresu budou chodit objednávky z e-shopu.</p>
+            </div>
+            <div class="field">
+                <label>E-mail odesílatele (volitelné)</label>
+                <input type="text" name="from_email" value="<?= h($nastaveni['from_email'] ?? FROM_EMAIL) ?>">
+                <p class="muted" style="margin:0.35rem 0 0">Adresa, ze které web odesílá automatické e-maily. Necháte-li prázdné, použije se adresa pro objednávky. Pro nejlepší doručitelnost by měla být na vlastní doméně webu.</p>
+            </div>
+        </div>
+        <div class="sticky-save"><button class="btn" type="submit">Uložit nastavení</button></div>
     </form>
     <?php endif; ?>
 
