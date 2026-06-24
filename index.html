@@ -2579,6 +2579,12 @@ async function submitOrder() {
         }
     }
 
+    // Uložit souhlasy do localStorage (1 rok)
+    const consentExpiry = new Date();
+    consentExpiry.setFullYear(consentExpiry.getFullYear() + 1);
+    localStorage.setItem('vopConsent', consentExpiry.getTime());
+    localStorage.setItem('gdprConsent', consentExpiry.getTime());
+
     const name = document.getElementById('fName').value.trim();
     const surname = document.getElementById('fSurname').value.trim();
     const email = document.getElementById('fEmail').value.trim();
