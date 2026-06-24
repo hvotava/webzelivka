@@ -17,8 +17,17 @@ define('SHOP_NAME', 'Vinařství Želivka');
 // Datový soubor s víny (čte ho web i administrace).
 define('DATA_FILE', __DIR__ . '/data/vina.json');
 
+// Datový soubor s editovatelnými texty webu.
+define('OBSAH_FILE', __DIR__ . '/data/obsah.json');
+
+// Datový soubor s fotkami galerie.
+define('GALERIE_FILE', __DIR__ . '/data/galerie.json');
+
 // Složka pro nahrané etikety vín.
 define('LABELS_DIR', __DIR__ . '/labels');
+
+// Složka pro fotky galerie.
+define('GALLERY_DIR', __DIR__ . '/gallery');
 
 // Soubor s otiskem (hashem) hesla do administrace. Vytvoří se při prvním
 // spuštění /admin (nastavení hesla). Je chráněn v admin/.htaccess.
