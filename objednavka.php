@@ -264,11 +264,12 @@ $custHeaders = [
     'Reply-To: ' . ORDER_EMAIL,
     'Content-Type: text/plain; charset=utf-8',
 ];
-// Potvrzení zákazníkovi zatím vypnuté (SMTP někdy timeout)
-// $encCustSubject = '=?UTF-8?B?' . base64_encode(SHOP_NAME . ' — potvrzení objednávky č. ' . $num) . '?=';
-// log_msg("OBJEDNAVKA: Posílám e-mail ZÁKAZNÍKOVI na {$email}");
-// $sentCust = send_email($email, $encCustSubject, $custBody, implode("\r\n", $custHeaders));
-// log_msg("OBJEDNAVKA: E-mail zákazníkovi vrátil: " . ($sentCust ? "true" : "false"));
+// Potvrzení zákazníkovi — pokusíme se SMTP, ale padáme zpět na mail() je-li potřeba
+$encCustSubject = '=?UTF-8?B?' . base64_encode(SHOP_NAME . ' — potvrzení objednávky č. ' . $num) . '?=';
+log_msg("OBJEDNAVKA: Posílám e-mail ZÁKAZNÍKOVI na {$email}");
+// Zkusíme mail() kvůli stabilitě (SMTP na druhé spojení někdy timeout)
+$sentCust = @mail($email, $encCustSubject, $custBody, implode("\r\n", $custHeaders));
+log_msg("OBJEDNAVKA: E-mail zákazníkovi (mail()) vrátil: " . ($sentCust ? "true" : "false"));
 
 if (!$sentAdmin) {
     log_msg("OBJEDNAVKA: CHYBA - Nepodařilo se poslat e-mail provozovateli!");
