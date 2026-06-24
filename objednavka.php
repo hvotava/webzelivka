@@ -22,55 +22,68 @@ function send_email($to, $subject, $body, $headers) {
     }
 
     try {
+        // Připoj se k SMTP serveru
         $socket = @fsockopen(SMTP_SERVER, SMTP_PORT, $errno, $errstr, 10);
-        if (!$socket) return @mail($to, $subject, $body, $headers); // fallback
+        if (!$socket) return @mail($to, $subject, $body, $headers);
 
         stream_set_timeout($socket, 10);
-
-        // SMTP dialog
         $resp = fgets($socket, 512);
         if (strpos($resp, '220') === false) { fclose($socket); return @mail($to, $subject, $body, $headers); }
 
-        $cmds = [
-            "EHLO " . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost'),
-        ];
+        // EHLO
+        fwrite($socket, "EHLO " . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost') . "\r\n");
+        fgets($socket, 512);
 
-        // TLS
+        // STARTTLS (pokud je nastaveno)
         if (SMTP_TLS) {
-            $cmds[] = "STARTTLS";
-        }
-
-        // Auth (pokud je login)
-        if (!empty(SMTP_LOGIN)) {
-            $cmds[] = "AUTH LOGIN";
-            $cmds[] = base64_encode(SMTP_LOGIN);
-            $cmds[] = base64_encode(SMTP_PASSWORD);
-        }
-
-        // E-mail
-        $fromAddr = FROM_EMAIL;
-        $cmds[] = "MAIL FROM:<{$fromAddr}>";
-        $cmds[] = "RCPT TO:<{$to}>";
-        $cmds[] = "DATA";
-
-        foreach ($cmds as $cmd) {
-            fwrite($socket, $cmd . "\r\n");
+            fwrite($socket, "STARTTLS\r\n");
             $resp = fgets($socket, 512);
-            if (strpos($resp, 'STARTTLS') !== false) {
-                stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]);
-                if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT)) {
-                    fclose($socket);
-                    return @mail($to, $subject, $body, $headers);
-                }
+            if (strpos($resp, '220') === false) { fclose($socket); return @mail($to, $subject, $body, $headers); }
+
+            $ctx = stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]);
+            stream_context_set_option($socket, 'ssl', 'verify_peer', false);
+            stream_context_set_option($socket, 'ssl', 'verify_peer_name', false);
+            if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+                fclose($socket);
+                return @mail($to, $subject, $body, $headers);
+            }
+            // Po TLS znovu EHLO
+            fwrite($socket, "EHLO " . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost') . "\r\n");
+            fgets($socket, 512);
+        }
+
+        // AUTH LOGIN (pokud je login vyplněn)
+        if (!empty(SMTP_LOGIN) && !empty(SMTP_PASSWORD)) {
+            fwrite($socket, "AUTH LOGIN\r\n");
+            fgets($socket, 512);
+            fwrite($socket, base64_encode(SMTP_LOGIN) . "\r\n");
+            fgets($socket, 512);
+            fwrite($socket, base64_encode(SMTP_PASSWORD) . "\r\n");
+            $resp = fgets($socket, 512);
+            if (strpos($resp, '235') === false && strpos($resp, '2.7') === false) {
+                fclose($socket);
+                return @mail($to, $subject, $body, $headers);
             }
         }
 
-        // Message
-        fwrite($socket, $subject . "\r\n");
-        fwrite($socket, $body . "\r\n");
-        fwrite($socket, ".\r\n");
+        // MAIL FROM
+        fwrite($socket, "MAIL FROM:<" . FROM_EMAIL . ">\r\n");
         fgets($socket, 512);
 
+        // RCPT TO
+        fwrite($socket, "RCPT TO:<{$to}>\r\n");
+        fgets($socket, 512);
+
+        // DATA
+        fwrite($socket, "DATA\r\n");
+        fgets($socket, 512);
+
+        // Message (headers + subject + body)
+        $msg = "Subject: {$subject}\r\n{$headers}\r\n\r\n{$body}";
+        fwrite($socket, $msg . "\r\n.\r\n");
+        fgets($socket, 512);
+
+        // QUIT
         fwrite($socket, "QUIT\r\n");
         fclose($socket);
         return true;
