@@ -425,7 +425,7 @@ $souhlasy_log = $loggedIn ? load_json(SOUHLASY_FILE, []) : [];
         <div class="sticky-save"><button class="btn" type="submit">Uložit galerii</button></div>
     </form>
 
-    <?php else: // ===== NASTAVENÍ ===== ?>
+    <?php elseif ($tab === 'nastaveni'): // ===== NASTAVENÍ ===== ?>
     <p class="muted">E-mailové adresy pro e-shop. Po uložení se ihned použijí pro nové objednávky.</p>
     <form method="post">
         <input type="hidden" name="csrf" value="<?= h($_SESSION['csrf']) ?>">
