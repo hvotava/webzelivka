@@ -14,6 +14,71 @@ function fail($msg, $code = 400) {
     exit;
 }
 
+/** Pošle e-mail přes SMTP nebo mail(), vrátí true/false. */
+function send_email($to, $subject, $body, $headers) {
+    // Pokud není SMTP nastavený, používáme mail()
+    if (empty(SMTP_SERVER)) {
+        return @mail($to, $subject, $body, $headers);
+    }
+
+    try {
+        $socket = @fsockopen(SMTP_SERVER, SMTP_PORT, $errno, $errstr, 10);
+        if (!$socket) return @mail($to, $subject, $body, $headers); // fallback
+
+        stream_set_timeout($socket, 10);
+
+        // SMTP dialog
+        $resp = fgets($socket, 512);
+        if (strpos($resp, '220') === false) { fclose($socket); return @mail($to, $subject, $body, $headers); }
+
+        $cmds = [
+            "EHLO " . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost'),
+        ];
+
+        // TLS
+        if (SMTP_TLS) {
+            $cmds[] = "STARTTLS";
+        }
+
+        // Auth (pokud je login)
+        if (!empty(SMTP_LOGIN)) {
+            $cmds[] = "AUTH LOGIN";
+            $cmds[] = base64_encode(SMTP_LOGIN);
+            $cmds[] = base64_encode(SMTP_PASSWORD);
+        }
+
+        // E-mail
+        $fromAddr = FROM_EMAIL;
+        $cmds[] = "MAIL FROM:<{$fromAddr}>";
+        $cmds[] = "RCPT TO:<{$to}>";
+        $cmds[] = "DATA";
+
+        foreach ($cmds as $cmd) {
+            fwrite($socket, $cmd . "\r\n");
+            $resp = fgets($socket, 512);
+            if (strpos($resp, 'STARTTLS') !== false) {
+                stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]);
+                if (!stream_socket_enable_crypto($socket, true, STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT)) {
+                    fclose($socket);
+                    return @mail($to, $subject, $body, $headers);
+                }
+            }
+        }
+
+        // Message
+        fwrite($socket, $subject . "\r\n");
+        fwrite($socket, $body . "\r\n");
+        fwrite($socket, ".\r\n");
+        fgets($socket, 512);
+
+        fwrite($socket, "QUIT\r\n");
+        fclose($socket);
+        return true;
+    } catch (Exception $e) {
+        return @mail($to, $subject, $body, $headers);
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     fail('Neplatná metoda požadavku.', 405);
 }
@@ -98,7 +163,7 @@ $headers = [
     'X-Mailer: PHP/' . phpversion(),
 ];
 $encSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
-$sentAdmin = @mail(ORDER_EMAIL, $encSubject, $adminBody, implode("\r\n", $headers));
+$sentAdmin = send_email(ORDER_EMAIL, $encSubject, $adminBody, implode("\r\n", $headers));
 
 // --- Potvrzení zákazníkovi (selhání neukončí objednávku) ---
 $custBody  = "Dobrý den, {$name} {$surname},\n\n";
@@ -124,7 +189,7 @@ $custHeaders = [
     'Content-Type: text/plain; charset=utf-8',
 ];
 $encCustSubject = '=?UTF-8?B?' . base64_encode(SHOP_NAME . ' — potvrzení objednávky č. ' . $num) . '?=';
-@mail($email, $encCustSubject, $custBody, implode("\r\n", $custHeaders));
+send_email($email, $encCustSubject, $custBody, implode("\r\n", $custHeaders));
 
 if (!$sentAdmin) {
     fail('Objednávku se nepodařilo odeslat e-mailem. Kontaktujte nás prosím přímo.', 500);

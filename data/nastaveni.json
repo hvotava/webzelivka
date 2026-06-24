@@ -1,4 +1,9 @@
 {
   "order_email": "bayerova@mjs.narodni.cz",
-  "from_email": "bayerova@mjs.narodni.cz"
+  "from_email": "bayerova@mjs.narodni.cz",
+  "smtp_server": "",
+  "smtp_port": "587",
+  "smtp_login": "",
+  "smtp_password": "",
+  "smtp_tls": true
 }

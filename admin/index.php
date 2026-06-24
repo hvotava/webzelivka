@@ -199,14 +199,27 @@ if ($loggedIn && $_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '
         if ($action === 'save_nastaveni') {
             $orderEmail = trim($_POST['order_email'] ?? '');
             $fromEmail  = trim($_POST['from_email'] ?? '');
+            $smtpServer = trim($_POST['smtp_server'] ?? '');
+            $smtpPort   = (int)($_POST['smtp_port'] ?? 587);
+            $smtpLogin  = trim($_POST['smtp_login'] ?? '');
+            $smtpPass   = trim($_POST['smtp_password'] ?? '');
+            $smtpTls    = !empty($_POST['smtp_tls']);
+
             if (!filter_var($orderEmail, FILTER_VALIDATE_EMAIL)) {
                 $err = 'E-mail pro objednávky není platná e-mailová adresa.';
             } elseif ($fromEmail !== '' && !filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
                 $err = 'E-mail odesílatele není platná e-mailová adresa.';
+            } elseif ($smtpServer !== '' && $smtpPort < 1) {
+                $err = 'SMTP port musí být číslo větší než 0.';
             } else {
                 $nast = load_json(NASTAVENI_FILE, []);
                 $nast['order_email'] = $orderEmail;
                 $nast['from_email']  = $fromEmail !== '' ? $fromEmail : $orderEmail;
+                $nast['smtp_server'] = $smtpServer;
+                $nast['smtp_port']   = $smtpPort;
+                $nast['smtp_login']  = $smtpLogin;
+                $nast['smtp_password'] = $smtpPass;
+                $nast['smtp_tls']    = $smtpTls;
                 $msg = save_json(NASTAVENI_FILE, $nast) ? 'Nastavení bylo uloženo.' : 'Uložení selhalo — zkontrolujte práva u data/nastaveni.json.';
             }
             $tab = 'nastaveni';
@@ -424,6 +437,24 @@ $nastaveni = $loggedIn ? load_json(NASTAVENI_FILE, []) : [];
                 <input type="text" name="from_email" value="<?= h($nastaveni['from_email'] ?? FROM_EMAIL) ?>">
                 <p class="muted" style="margin:0.35rem 0 0">Adresa, ze které web odesílá automatické e-maily. Necháte-li prázdné, použije se adresa pro objednávky. Pro nejlepší doručitelnost by měla být na vlastní doméně webu.</p>
             </div>
+            <hr style="margin:1.5rem 0;border:none;border-top:1px solid #e5ddcf">
+            <h3 style="margin:0.75rem 0 0.5rem;font-size:0.95rem">SMTP server (volitelné)</h3>
+            <p class="muted" style="margin:0 0 0.75rem">Bez SMTP se e-maily posílají přes PHP mail() funkci, což nemusí být spolehlivé. Vyplňte SMTP údaje pro vyšší doručitelnost. Ponechte-li prázdné, web se vrátí na mail().</p>
+            <div class="field">
+                <label>SMTP server</label>
+                <input type="text" name="smtp_server" value="<?= h($nastaveni['smtp_server'] ?? '') ?>" placeholder="např. smtp.mjs.narodni.cz">
+            </div>
+            <div class="grid3">
+                <div><label>SMTP port</label><input type="number" name="smtp_port" value="<?= h($nastaveni['smtp_port'] ?? 587) ?>" min="1"></div>
+                <div colspan="2"><label>SMTP login</label><input type="text" name="smtp_login" value="<?= h($nastaveni['smtp_login'] ?? '') ?>" placeholder="e-mail nebo uživatelské jméno"></div>
+            </div>
+            <div class="field">
+                <label>SMTP heslo</label>
+                <input type="password" name="smtp_password" value="<?= h($nastaveni['smtp_password'] ?? '') ?>" placeholder="">
+            </div>
+            <label style="display:inline-flex;align-items:center;gap:0.35rem;font-weight:500">
+                <input type="checkbox" name="smtp_tls" value="1" <?= !empty($nastaveni['smtp_tls']) ? 'checked' : '' ?>> Použít TLS/SSL
+            </label>
         </div>
         <div class="sticky-save"><button class="btn" type="submit">Uložit nastavení</button></div>
     </form>

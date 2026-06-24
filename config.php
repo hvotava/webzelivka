@@ -21,6 +21,13 @@ define('ORDER_EMAIL', !empty($__nastaveni['order_email']) ? $__nastaveni['order_
 // Odesílatel automatických e-mailů. Mění se v administraci.
 define('FROM_EMAIL', !empty($__nastaveni['from_email']) ? $__nastaveni['from_email'] : 'bayerova@mjs.narodni.cz');
 
+// SMTP nastavení pro odeslání e-mailů (volitelné — bez toho se používá mail()).
+define('SMTP_SERVER', $__nastaveni['smtp_server'] ?? '');
+define('SMTP_PORT', (int)($__nastaveni['smtp_port'] ?? 587));
+define('SMTP_LOGIN', $__nastaveni['smtp_login'] ?? '');
+define('SMTP_PASSWORD', $__nastaveni['smtp_password'] ?? '');
+define('SMTP_TLS', !empty($__nastaveni['smtp_tls']));
+
 // Název obchodu (používá se v předmětu a textu e-mailů).
 define('SHOP_NAME', 'Vinařství Želivka');
 
