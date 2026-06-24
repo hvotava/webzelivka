@@ -43,6 +43,9 @@ define('OBSAH_FILE', __DIR__ . '/data/obsah.json');
 // Datový soubor s fotkami galerie.
 define('GALERIE_FILE', __DIR__ . '/data/galerie.json');
 
+// Datový soubor se souhlasy s T&C a GDPR.
+define('SOUHLASY_FILE', __DIR__ . '/data/souhlasy.json');
+
 // Složka pro nahrané etikety vín.
 define('LABELS_DIR', __DIR__ . '/labels');
 

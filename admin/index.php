@@ -69,7 +69,7 @@ function csrf_ok() { return isset($_POST['csrf']) && hash_equals($_SESSION['csrf
 $err = ''; $msg = '';
 $hasPassword = is_file(ADMIN_HASH_FILE) && trim(file_get_contents(ADMIN_HASH_FILE)) !== '';
 $tab = $_GET['tab'] ?? 'vina';
-if (!in_array($tab, ['vina', 'texty', 'galerie', 'nastaveni'], true)) $tab = 'vina';
+if (!in_array($tab, ['vina', 'texty', 'galerie', 'nastaveni', 'souhlasy'], true)) $tab = 'vina';
 
 // ---------- Odhlášení ----------
 if (isset($_GET['logout'])) { $_SESSION = []; session_destroy(); header('Location: index.php'); exit; }
@@ -233,6 +233,7 @@ $wines     = $loggedIn ? load_json(DATA_FILE, []) : [];
 $obsah     = $loggedIn ? load_json(OBSAH_FILE, []) : [];
 $galerie   = $loggedIn ? load_json(GALERIE_FILE, []) : [];
 $nastaveni = $loggedIn ? load_json(NASTAVENI_FILE, []) : [];
+$souhlasy_log = $loggedIn ? load_json(SOUHLASY_FILE, []) : [];
 ?>
 <!DOCTYPE html>
 <html lang="cs">
@@ -320,6 +321,7 @@ $nastaveni = $loggedIn ? load_json(NASTAVENI_FILE, []) : [];
         <a class="tab <?= $tab === 'texty' ? 'active' : '' ?>" href="?tab=texty">Texty</a>
         <a class="tab <?= $tab === 'galerie' ? 'active' : '' ?>" href="?tab=galerie">Galerie</a>
         <a class="tab <?= $tab === 'nastaveni' ? 'active' : '' ?>" href="?tab=nastaveni">Nastavení</a>
+        <a class="tab <?= $tab === 'souhlasy' ? 'active' : '' ?>" href="?tab=souhlasy">Souhlasy</a>
     </div>
 
     <?php if ($msg): ?><div class="alert alert-ok"><?= h($msg) ?></div><?php endif; ?>
@@ -468,6 +470,39 @@ $nastaveni = $loggedIn ? load_json(NASTAVENI_FILE, []) : [];
         </div>
         <div class="sticky-save"><button class="btn" type="submit">Uložit nastavení</button></div>
     </form>
+
+    <?php elseif ($tab === 'souhlasy'): // ===== SOUHLASY ===== ?>
+    <p class="muted">Historii souhlasů s obchodními podmínkami a GDPR od všech objednávajících.</p>
+    <?php if (empty($souhlasy_log)): ?>
+        <div class="card"><p class="muted">Zatím žádné zaznamenané souhlasy.</p></div>
+    <?php else: ?>
+        <div class="card">
+            <table class="items-table" style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr style="background:#f5f1e8;border-bottom:1px solid #e5dccf;">
+                        <th style="padding:10px;text-align:left;font-weight:600;font-size:13px;">Čas</th>
+                        <th style="padding:10px;text-align:left;font-weight:600;font-size:13px;">Jméno</th>
+                        <th style="padding:10px;text-align:left;font-weight:600;font-size:13px;">E-mail</th>
+                        <th style="padding:10px;text-align:center;font-weight:600;font-size:13px;">T&C</th>
+                        <th style="padding:10px;text-align:center;font-weight:600;font-size:13px;">GDPR</th>
+                        <th style="padding:10px;text-align:left;font-weight:600;font-size:13px;">IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach (array_reverse($souhlasy_log) as $s): ?>
+                    <tr style="border-bottom:1px solid #f0ede0;">
+                        <td style="padding:10px;font-size:13px;"><?= h($s['cas']) ?></td>
+                        <td style="padding:10px;font-size:13px;"><?= h($s['jmeno'] . ' ' . $s['prijmeni']) ?></td>
+                        <td style="padding:10px;font-size:13px;"><?= h($s['email']) ?></td>
+                        <td style="padding:10px;text-align:center;font-size:13px;"><?= $s['vop'] ? '✓' : '✗' ?></td>
+                        <td style="padding:10px;text-align:center;font-size:13px;"><?= $s['gdpr'] ? '✓' : '✗' ?></td>
+                        <td style="padding:10px;font-size:13px;color:#6b5d4f;"><?= h($s['ip']) ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
     <?php endif; ?>
 
     <details>

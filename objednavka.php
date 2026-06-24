@@ -181,6 +181,21 @@ $phone   = trim($c['phone'] ?? '');
 if ($name === '' || $surname === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     fail('Chybí povinné údaje (jméno, příjmení, platný e-mail).');
 }
+
+// Zaznamenání souhlasů
+$souhlasy = load_json(SOUHLASY_FILE, []);
+$souhlasy[] = [
+    'cas' => date('Y-m-d H:i:s'),
+    'jmeno' => $name,
+    'prijmeni' => $surname,
+    'email' => $email,
+    'vop' => !empty($o['vop']),
+    'gdpr' => !empty($o['gdpr']),
+    'ip' => $_SERVER['REMOTE_ADDR'] ?? 'neznámá'
+];
+save_json(SOUHLASY_FILE, $souhlasy);
+log_msg("OBJEDNAVKA: Zaznamenání souhlasů pro {$email}");
+
 $items = $o['items'] ?? [];
 if (!is_array($items) || count($items) === 0) {
     fail('Objednávka neobsahuje žádné položky.');

@@ -2632,7 +2632,9 @@ async function submitOrder() {
         customer: { name, surname, email, phone },
         delivery: { method: delivery, label: deliveryLabels[delivery] || delivery, street, city, zip },
         payment: { method: payment, label: paymentLabels[payment] || payment },
-        items, totalItems, subtotal, discountPercent: discount * 100, discountAmount, total
+        items, totalItems, subtotal, discountPercent: discount * 100, discountAmount, total,
+        vop: document.getElementById('cVOP').checked,
+        gdpr: document.getElementById('cGDPR').checked
     };
 
     const btn = document.querySelector('.btn-submit-order');
