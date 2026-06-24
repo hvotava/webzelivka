@@ -51,14 +51,15 @@ function send_email($to, $subject, $body, $headers) {
             return @mail($to, $subject, $body, $headers);
         }
 
-        // Čti odpovědi se čtením všech řádků (250- znamená pokračování)
+        // Čti odpovědi se čtením všech řádků (250- znamená pokračování, 250 je konec)
         function smtp_read_response($socket) {
             $resp = '';
             while (true) {
                 $line = fgets($socket, 512);
                 if (!$line) break;
                 $resp .= $line;
-                if (preg_match('/^\d{3} /', $line)) break; // Poslední řádek (bez pomlčky)
+                // Pokud řádek NENÍ "XXX-" (pomlčka), je to poslední řádek
+                if (!preg_match('/^\d{3}-/', $line)) break;
             }
             return $resp;
         }
