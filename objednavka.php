@@ -8,6 +8,14 @@ require __DIR__ . '/config.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
+$logFile = __DIR__ . '/objednavka.log';
+function log_msg($msg) {
+    global $logFile;
+    @file_put_contents($logFile, date('Y-m-d H:i:s') . " — " . $msg . "\n", FILE_APPEND);
+}
+
+log_msg("Přijata objednávka");
+
 function fail($msg, $code = 400) {
     http_response_code($code);
     echo json_encode(['ok' => false, 'error' => $msg], JSON_UNESCAPED_UNICODE);
