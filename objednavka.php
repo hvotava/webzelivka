@@ -35,15 +35,20 @@ function send_email($to, $subject, $body, $headers) {
     log_msg("OBJEDNAVKA: Pokusím se o SMTP na {$to}, server=" . SMTP_SERVER . ":" . SMTP_PORT);
 
     try {
-        // Připoj se k SMTP serveru
-        $socket = @fsockopen(SMTP_SERVER, SMTP_PORT, $errno, $errstr, 10);
+        // Připoj se k SMTP serveru (s vyšším timeoutem)
+        $socket = @fsockopen(SMTP_SERVER, SMTP_PORT, $errno, $errstr, 15);
         if (!$socket) {
             log_msg("OBJEDNAVKA: Nemůžu se připojit k SMTP ({$errno}: {$errstr})");
             return @mail($to, $subject, $body, $headers);
         }
 
-        stream_set_timeout($socket, 10);
-        $resp = fgets($socket, 512);
+        stream_set_timeout($socket, 15);
+        $resp = @fgets($socket, 512);
+        if (!$resp) {
+            log_msg("OBJEDNAVKA: Bez odpovědi z SMTP serveru (timeout?)");
+            fclose($socket);
+            return @mail($to, $subject, $body, $headers);
+        }
         log_msg("OBJEDNAVKA: Odpověď po připojení: " . trim($resp));
         if (strpos($resp, '220') === false) {
             log_msg("OBJEDNAVKA: Chybná odpověď z SMTP serveru");
