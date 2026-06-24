@@ -59,10 +59,13 @@ function send_email($to, $subject, $body, $headers) {
         // Čti odpovědi se čtením všech řádků (250- znamená pokračování, 250 je konec)
         function smtp_read_response($socket) {
             $resp = '';
-            while (true) {
-                $line = fgets($socket, 512);
+            $maxLines = 20; // Ochranu před nekonečným čtením
+            $lineCount = 0;
+            while ($lineCount < $maxLines) {
+                $line = @fgets($socket, 512);
                 if (!$line) break;
                 $resp .= $line;
+                $lineCount++;
                 // Pokud řádek NENÍ "XXX-" (pomlčka), je to poslední řádek
                 if (!preg_match('/^\d{3}-/', $line)) break;
             }
@@ -72,8 +75,9 @@ function send_email($to, $subject, $body, $headers) {
         // EHLO
         log_msg("OBJEDNAVKA: Posílám EHLO");
         fwrite($socket, "EHLO " . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : 'localhost') . "\r\n");
+        log_msg("OBJEDNAVKA: EHLO poslán, čekám odpověď...");
         $resp = smtp_read_response($socket);
-        log_msg("OBJEDNAVKA: EHLO odpověď: " . trim($resp));
+        log_msg("OBJEDNAVKA: EHLO odpověď: " . trim(substr($resp, 0, 100)));
 
         // STARTTLS (pokud je nastaveno)
         if (SMTP_TLS) {
