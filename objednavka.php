@@ -220,7 +220,7 @@ if (($d['method'] ?? '') === 'messenger') {
     $addr = trim($d['street'] ?? '') . ', ' . trim($d['zip'] ?? '') . ' ' . trim($d['city'] ?? '');
 }
 
-// --- Sestavení textu položek (ceny počítáme znovu na serveru) ---
+// --- Sestavení položek jako HTML řádky tabulky (ceny počítáme znovu na serveru) ---
 $lines = '';
 $subtotal = 0;
 $totalItems = 0;
@@ -232,7 +232,8 @@ foreach ($items as $it) {
     $line = $price * $qty;
     $subtotal += $line;
     $totalItems += $qty;
-    $lines .= sprintf("  %-32s %2d ks × %4d Kč = %6d Kč\n", $iname, $qty, $price, $line);
+    $safeName = htmlspecialchars($iname, ENT_QUOTES, 'UTF-8');
+    $lines .= "<tr><td>{$safeName}</td><td>{$qty} ks × {$price} Kč</td><td class=\"price\">{$line} Kč</td></tr>";
 }
 if ($totalItems === 0) {
     fail('Objednávka neobsahuje žádné položky.');
@@ -243,6 +244,19 @@ $discountAmount = (int)round($subtotal * $discount);
 $total = $subtotal - $discountAmount;
 
 $num = date('YmdHis');
+
+// Předpočítané podmíněné části (heredoc neumí PHP výrazy, jen proměnné).
+$phoneDisp = $phone !== '' ? htmlspecialchars($phone, ENT_QUOTES, 'UTF-8') : '—';
+$nameDisp  = htmlspecialchars($name . ' ' . $surname, ENT_QUOTES, 'UTF-8');
+$emailDisp = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+$deliveryDisp = htmlspecialchars($deliveryLabel, ENT_QUOTES, 'UTF-8');
+$paymentDisp  = htmlspecialchars($paymentLabel, ENT_QUOTES, 'UTF-8');
+$addrRow = $addr !== ''
+    ? '<p><strong>Adresa:</strong> ' . htmlspecialchars($addr, ENT_QUOTES, 'UTF-8') . '</p>'
+    : '';
+$discountRow = $discountAmount > 0
+    ? '<div class="total-row"><span>Sleva ' . (int)round($discount * 100) . '% (' . $totalItems . ' lahví):</span><span>-' . $discountAmount . ' Kč</span></div>'
+    : '';
 
 // --- E-mail provozovateli (HTML) ---
 $adminBody = <<<EOF
@@ -280,18 +294,18 @@ $adminBody = <<<EOF
             <div class="section">
                 <div class="section-title">Zákazník</div>
                 <div class="customer-info">
-                    <p><strong>{$name} {$surname}</strong></p>
-                    <p>E-mail: {$email}</p>
-                    <p>Telefon: " . ($phone !== '' ? $phone : '—') . "</p>
+                    <p><strong>{$nameDisp}</strong></p>
+                    <p>E-mail: {$emailDisp}</p>
+                    <p>Telefon: {$phoneDisp}</p>
                 </div>
             </div>
 
             <div class="section">
-                <div class="section-title">Doručení & Platba</div>
+                <div class="section-title">Doručení &amp; Platba</div>
                 <div class="customer-info">
-                    <p><strong>Doručení:</strong> {$deliveryLabel}</p>
-                    " . ($addr !== '' ? "<p><strong>Adresa:</strong> {$addr}</p>" : "") . "
-                    <p><strong>Platba:</strong> {$paymentLabel}</p>
+                    <p><strong>Doručení:</strong> {$deliveryDisp}</p>
+                    {$addrRow}
+                    <p><strong>Platba:</strong> {$paymentDisp}</p>
                 </div>
             </div>
 
@@ -316,8 +330,8 @@ $adminBody = <<<EOF
                     <span>Mezisoučet:</span>
                     <span>{$subtotal} Kč</span>
                 </div>
-                " . ($discountAmount > 0 ? "<div class='total-row'><span>Sleva " . (int)round($discount * 100) . "% (" . $totalItems . " lahví):</span><span>-{$discountAmount} Kč</span></div>" : "") . "
-                <div class=\"total-final\">
+                {$discountRow}
+                <div class="total-final">
                     <span>CELKEM (bez dopravy):</span>
                     <span>{$total} Kč</span>
                 </div>
