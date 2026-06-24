@@ -219,23 +219,92 @@ $total = $subtotal - $discountAmount;
 
 $num = date('YmdHis');
 
-// --- E-mail provozovateli ---
-$adminBody  = "Nová objednávka z webu (č. {$num})\n";
-$adminBody .= "=======================================\n\n";
-$adminBody .= "Zákazník:\n";
-$adminBody .= "  {$name} {$surname}\n";
-$adminBody .= "  E-mail: {$email}\n";
-$adminBody .= "  Telefon: " . ($phone !== '' ? $phone : '—') . "\n\n";
-$adminBody .= "Doručení: {$deliveryLabel}\n";
-if ($addr !== '') $adminBody .= "  Adresa: {$addr}\n";
-$adminBody .= "Platba: {$paymentLabel}\n\n";
-$adminBody .= "Položky:\n{$lines}\n";
-$adminBody .= str_repeat('-', 60) . "\n";
-$adminBody .= sprintf("  Mezisoučet: %d Kč\n", $subtotal);
-if ($discountAmount > 0) {
-    $adminBody .= sprintf("  Sleva %d %% (%d lahví): -%d Kč\n", (int)round($discount * 100), $totalItems, $discountAmount);
-}
-$adminBody .= sprintf("  CELKEM (bez dopravy): %d Kč\n", $total);
+// --- E-mail provozovateli (HTML) ---
+$adminBody = <<<EOF
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; color: #2c1810; background: #faf8f4; margin: 0; padding: 0; }
+        .email-container { max-width: 600px; margin: 20px auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header { background: #b8963e; color: #fff; padding: 30px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+        .content { padding: 30px 20px; }
+        .section { margin-bottom: 25px; }
+        .section-title { color: #b8963e; font-size: 16px; font-weight: 600; border-bottom: 2px solid #d4b562; padding-bottom: 8px; margin-bottom: 12px; }
+        .customer-info { background: #faf8f4; padding: 15px; border-radius: 4px; margin-bottom: 15px; }
+        .customer-info p { margin: 5px 0; font-size: 14px; }
+        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .items-table th { background: #f5f1e8; text-align: left; padding: 10px; font-size: 13px; font-weight: 600; color: #2c1810; border-bottom: 1px solid #e5dccf; }
+        .items-table td { padding: 10px; font-size: 14px; border-bottom: 1px solid #f0ede0; }
+        .items-table .price { text-align: right; color: #b8963e; font-weight: 600; }
+        .totals { margin-top: 20px; padding-top: 15px; border-top: 2px solid #e5dccf; }
+        .total-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; }
+        .total-final { display: flex; justify-content: space-between; padding: 12px 0; font-size: 16px; font-weight: 600; color: #b8963e; }
+        .footer { background: #f5f1e8; padding: 20px; text-align: center; font-size: 12px; color: #6b5d4f; border-top: 1px solid #e5dccf; }
+        .btn { display: inline-block; background: #b8963e; color: #fff; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-weight: 600; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Nová objednávka č. {$num}</h1>
+        </div>
+        <div class="content">
+            <div class="section">
+                <div class="section-title">Zákazník</div>
+                <div class="customer-info">
+                    <p><strong>{$name} {$surname}</strong></p>
+                    <p>E-mail: {$email}</p>
+                    <p>Telefon: " . ($phone !== '' ? $phone : '—') . "</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Doručení & Platba</div>
+                <div class="customer-info">
+                    <p><strong>Doručení:</strong> {$deliveryLabel}</p>
+                    " . ($addr !== '' ? "<p><strong>Adresa:</strong> {$addr}</p>" : "") . "
+                    <p><strong>Platba:</strong> {$paymentLabel}</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Položky</div>
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th>Víno</th>
+                            <th>Počet</th>
+                            <th class="price">Cena</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {$lines}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="totals">
+                <div class="total-row">
+                    <span>Mezisoučet:</span>
+                    <span>{$subtotal} Kč</span>
+                </div>
+                " . ($discountAmount > 0 ? "<div class='total-row'><span>Sleva " . (int)round($discount * 100) . "% (" . $totalItems . " lahví):</span><span>-{$discountAmount} Kč</span></div>" : "") . "
+                <div class=\"total-final\">
+                    <span>CELKEM (bez dopravy):</span>
+                    <span>{$total} Kč</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Vinařství Želivka | Hněvkovice nad Želivkou</p>
+        </div>
+    </div>
+</body>
+</html>
+EOF;
 
 $subject = SHOP_NAME . " — nová objednávka č. {$num}";
 $headers = [
@@ -243,7 +312,7 @@ $headers = [
     'To: ' . ORDER_EMAIL,
     'Cc: ' . $email,
     'Reply-To: ' . $name . ' ' . $surname . ' <' . $email . '>',
-    'Content-Type: text/plain; charset=utf-8',
+    'Content-Type: text/html; charset=utf-8',
     'X-Mailer: PHP/' . phpversion(),
 ];
 $encSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
